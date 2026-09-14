@@ -40,3 +40,7 @@ class Lease(models.Model):
         """Mark the lease as at risk."""
         for record in self:
             record.write({'state': 'at_risk'})
+    def set_back_to_draft(self):
+        """Set the lease back to draft."""
+        for record in self:
+            record.write({'state': 'draft'})        
