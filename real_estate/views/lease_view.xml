@@ -24,8 +24,10 @@
         <field name="model">real_estate.lease</field>
         <field name="arch" type="xml">
             <form string="Lease">
-             <header> 
-             <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired,cancelled"/>
+             <header>
+                 <button name="action_set_active" string="Set Active" type="object" class="oe_highlight"/>
+                 <button name="action_set_at_risk" string="Set At Risk" type="object"/>
+                 <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired,cancelled"/>
              </header>
                 <sheet>
                     <div class="oe_title">

@@ -30,3 +30,13 @@ class Lease(models.Model):
         ('expired', 'Expired'),
         ('cancelled', 'Cancelled'),
     ], string='Status', default='draft', required=True)
+
+    def action_set_active(self):
+        """Mark the lease as active."""
+        for record in self:
+            record.write({'state': 'active'})
+
+    def action_set_at_risk(self):
+        """Mark the lease as at risk."""
+        for record in self:
+            record.write({'state': 'at_risk'})
