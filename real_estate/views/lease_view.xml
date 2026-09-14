@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <tree string="Leases">
                 <field name="name"/>
+                <field name="state"/>
                 <field name="property_id"/>
                 <field name="tenant_id"/>
                 <field name="start_date"/>
@@ -23,18 +24,30 @@
         <field name="model">real_estate.lease</field>
         <field name="arch" type="xml">
             <form string="Lease">
+             <header> 
+             <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired,cancelled"/>
+             </header>
                 <sheet>
-                    <group>
-                        <group>
+                    <div class="oe_title">
+                        <h1>
                             <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Lease Information">
                             <field name="property_id"/>
                             <field name="tenant_id"/>
+                            <field name="state"/>
                         </group>
-                        <group>
-                            <field name="start_date"/>
-                            <field name="end_date"/>
+                        <group string="Financial Details">
                             <field name="monthly_rent"/>
                             <field name="deposit_paid"/>
+                        </group>
+                          <group string="Lease Details">
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                          
                         </group>
                     </group>
                 </sheet>
@@ -43,8 +56,8 @@
     </record>
 
     <!-- Lease Action -->
-    <record id="leses_info_action" model="ir.actions.act_window">
-        <field name="name">Leases Info</field>
+    <record id="action_lease" model="ir.actions.act_window">
+        <field name="name">Leases</field>
         <field name="res_model">real_estate.lease</field>
         <field name="view_mode">tree,form</field>
 

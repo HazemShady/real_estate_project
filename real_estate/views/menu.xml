@@ -12,26 +12,17 @@
               action="action_property"
               sequence="10"/>
 
-<!-- 
-    <menuitem
-        id="leases_menu"
-        name="Leases"
-        parent="menu_real_estate_root"
-        sequence="20"/>
+    <!-- Leases Menu -->
+    <menuitem id="menu_lease"
+              name="Leases"
+              parent="menu_real_estate_root"
+              action="action_lease"
+              sequence="20"/>
 
-
-    <menuitem
-        id="leses_info_menu"
-        name="Info"
-        parent="leases_menu"
-        action="leses_info_action"
-        sequence="30"/> -->
-
-
-        <!-- Tenants Menu -->
+    <!-- Tenants Menu -->
     <menuitem id="menu_tenant"
                 name="Tenants"
                 parent="menu_real_estate_root"
                 action="action_tenant"
-                sequence="20"/>
+                sequence="30"/>
 </odoo>
