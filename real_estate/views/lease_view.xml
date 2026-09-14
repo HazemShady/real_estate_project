@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Lease Tree View -->
+    <record id="leses_view_tree" model="ir.ui.view">
+        <field name="name">lease.tree</field>
+        <field name="model">real_estate.lease</field>
+        <field name="arch" type="xml">
+            <tree string="Leases">
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="tenant_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="monthly_rent"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Lease Form View -->
+    <record id="lease_view_form" model="ir.ui.view">
+        <field name="name">lease.form</field>
+        <field name="model">real_estate.lease</field>
+        <field name="arch" type="xml">
+            <form string="Lease">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="property_id"/>
+                            <field name="tenant_id"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="monthly_rent"/>
+                            <field name="deposit_paid"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Lease Action -->
+    <record id="leses_info_action" model="ir.actions.act_window">
+        <field name="name">Leases Info</field>
+        <field name="res_model">real_estate.lease</field>
+        <field name="view_mode">tree,form</field>
+
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lease info
+            </p>
+        </field>
+    </record>
+
+</odoo>
+
