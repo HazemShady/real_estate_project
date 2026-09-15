@@ -1,0 +1,19 @@
+<odoo>
+    <record id="crm_lead_view_form_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_add_name_to_notes" string="Add Name to Notes" type="object" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="string">Expected Date</attribute>
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="string">sales man</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

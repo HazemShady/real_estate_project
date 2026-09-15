@@ -31,7 +31,7 @@ Long description of module's purpose
     'views/lease_view.xml',
     'views/tenant.xml',
     'views/menu.xml',
-      
+    'views/crm_lead_view.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

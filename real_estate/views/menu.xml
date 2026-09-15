@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Main Menu (Top Level) -->
-    <menuitem id="menu_real_estate_root"
-              name="Real Estate"
-              sequence="10"/>
+    <menuitem
+        id="menu_real_estate_root"
+        name="Real Estate"
+        sequence="10"/>
 
     <!-- Properties Menu -->
-    <menuitem id="menu_property"
-              name="Properties"
-              parent="menu_real_estate_root"
-              action="action_property"
-              sequence="10"/>
+    <menuitem
+        id="menu_property"
+        name="Properties"
+        parent="menu_real_estate_root"
+        action="action_property"
+        sequence="10"/>
 
     <!-- Leases Menu -->
-    <menuitem id="menu_lease"
-              name="Leases"
-              parent="menu_real_estate_root"
-              action="action_lease"
-              sequence="20"/>
+    <menuitem
+        id="menu_lease"
+        name="Leases"
+        parent="menu_real_estate_root"
+        action="action_lease"
+        sequence="20"/>
 
     <!-- Tenants Menu -->
-    <menuitem id="menu_tenant"
-                name="Tenants"
-                parent="menu_real_estate_root"
-                action="action_tenant"
-                sequence="30"/>
+    <menuitem
+        id="menu_tenant"
+        name="Tenants"
+        parent="menu_real_estate_root"
+        action="action_tenant"
+        sequence="30"/>
 </odoo>

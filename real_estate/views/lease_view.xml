@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <!-- Lease Tree View -->
     <record id="leses_view_tree" model="ir.ui.view">
         <field name="name">lease.tree</field>
@@ -24,12 +23,13 @@
         <field name="model">real_estate.lease</field>
         <field name="arch" type="xml">
             <form string="Lease">
-             <header>
-                 <button name="action_set_active" string="Set Active" invisible="state == 'active'" type="object" class="oe_highlight"/>
-                 <button name="set_back_to_draft" string="Set Draft" invisible="state == 'draft'" type="object"/>
-                 <button name="action_set_at_risk" string="Set At Risk" invisible="state == 'at_risk'" type="object"/>
-                 <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired,cancelled"/>
-             </header>
+                <header>
+                    <button name="action_set_active" string="Set Active" invisible="state == 'active'" type="object" class="oe_highlight"/>
+                    <button name="set_back_to_draft" string="Set Draft" invisible="state == 'draft'" type="object"/>
+                    <button name="action_set_at_risk" string="Set At Risk" invisible="state == 'at_risk'" type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired,cancelled"/>
+                </header>
+
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -47,10 +47,9 @@
                             <field name="monthly_rent"/>
                             <field name="deposit_paid"/>
                         </group>
-                          <group string="Lease Details">
+                        <group string="Lease Details">
                             <field name="start_date"/>
                             <field name="end_date"/>
-                          
                         </group>
                     </group>
                 </sheet>
@@ -63,13 +62,11 @@
         <field name="name">Leases</field>
         <field name="res_model">real_estate.lease</field>
         <field name="view_mode">tree,form</field>
-
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first lease info
             </p>
         </field>
     </record>
-
 </odoo>
 
