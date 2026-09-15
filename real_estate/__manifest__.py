@@ -27,11 +27,13 @@ Long description of module's purpose
     # always loaded
     'data': [
     'security/ir.model.access.csv',
+    'data/ir_sequence_data.xml',
     'views/property_views.xml',
     'views/lease_view.xml',
     'views/tenant.xml',
     'views/menu.xml',
     'views/crm_lead_view.xml'
+    
     ],
     # only loaded in demonstration mode
     'demo': [

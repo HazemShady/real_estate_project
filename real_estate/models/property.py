@@ -2,6 +2,7 @@
 from odoo import fields, models
 from odoo.exceptions import UserError
 
+
 class Property(models.Model):
     _name = 'real_estate.property'
     _description = 'Real Estate Property'
