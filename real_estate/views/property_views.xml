@@ -49,6 +49,10 @@
         <field name="arch" type="xml">
             <form string="Property">
                 <header>
+                    <button type="action" name="%(action_real_estate_lease_wizard)d"
+                            string="Create Lease"
+                            context="{'default_property_id': active_id}"
+                            class="oe_highlight"/>
                     <button name="mark_as_occupied" string="Mark as Occupied" type="object" invisible="not available" class="oe_highlight"/>
                     <button name="mark_as_available" string="Mark as Available" type="object" invisible="available" class="oe_highlight"/>
                     <button name="add_text" string="Add Text" type="object" class="oe_highlight"/>

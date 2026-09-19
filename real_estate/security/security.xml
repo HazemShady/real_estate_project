@@ -2,4 +2,9 @@
     <record id="group_property_manager" model="res.groups">
         <field name="name">Property Manager</field>
     </record>
+
+    <record id="group_lease_manager" model="res.groups">
+        <field name="name">Lease Manager</field>
+        <field name="implied_ids" eval="[(4, ref('real_estate.group_property_manager'))]"/>
+    </record>
 </odoo>
