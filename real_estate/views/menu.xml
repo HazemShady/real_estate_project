@@ -13,6 +13,7 @@
         parent="menu_real_estate_root"
         action="action_property"
         sequence="10"/>
+        
 
     <!-- Leases Menu -->
     <menuitem
@@ -20,8 +21,8 @@
         name="Leases"
         parent="menu_real_estate_root"
         action="action_lease"
+        
         sequence="20"/>
-
     <!-- Tenants Menu -->
     <menuitem
         id="menu_tenant"
@@ -29,4 +30,12 @@
         parent="menu_real_estate_root"
         action="action_tenant"
         sequence="30"/>
+    <menuitem
+        id="menu_maintenance"
+        name="Maintenance"
+        parent="menu_real_estate_root"
+        action="action_maintenance"
+        sequence="40"/>
+
+        
 </odoo>

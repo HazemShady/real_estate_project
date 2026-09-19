@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- maintenanceList View (Tree) -->
+    <record id="view_maintenance_tree" model="ir.ui.view">
+        <field name="name">real_estate.maintenance.tree</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <tree string="maintenances">
+                <field name="name"/>
+                <field name="lease_id"/>
+                <field name="tenant_id"/>
+                <field name="property_id"/> 
+                <field name="issue_type"/>
+                <field name="urgency"/> 
+        
+            </tree>
+        </field>
+    </record>
+        <!-- maintenance Form View -->
+    <record id="view_maintenance_form" model="ir.ui.view">
+        <field name="name">real_estate.maintenance.form</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <form string="maintenance">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Maintenance Name"/>
+                        </h1>
+                    </div>
+                    <group string="Maintenance Details">
+                        <group>
+                <field name="lease_id"/>
+                <field name="tenant_id"/>
+                <field name="property_id"/> 
+                        </group>
+
+                    </group>
+                    
+                    <group>
+                        <group>
+             
+                <field name="issue_type"/>
+                <field name="urgency"/> 
+                         
+                           
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- maintenance Action (Links views together) -->
+    <record id="action_maintenance" model="ir.actions.act_window">
+        <field name="name">Maintenances</field>
+        <field name="res_model">maintenance.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Maintenance Request
+            </p>
+        </field>
+    </record>
+</odoo>

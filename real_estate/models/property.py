@@ -63,7 +63,8 @@ class Property(models.Model):
     
     def write(self, vals):
         if 'bedrooms' in vals:
-            if vals["available"] == True and vals.get('bedrooms') != self.bedrooms :
-                raise UserError("You cannot edit Bedrooms while the property is unavailable.")
+            available = vals.get('available', self.available)
+            if available is False and vals.get('bedrooms') != self.bedrooms:
+                raise UserError("You cannot edit bedrooms while the property is unavailable.")
 
         return super(Property, self).write(vals)

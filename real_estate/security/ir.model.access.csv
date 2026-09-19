@@ -1,5 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_property_manager,property.manager,model_real_estate_property,,1,1,1,1
-access_lease_manager,lease.manager,model_real_estate_lease,,1,1,1,1
-access_tenant_manager,tenant.manager,model_real_estate_tenant,,1,1,1,1
+access_property_manager,property.manager,model_real_estate_property,real_estate.group_property_manager,1,1,1,1
+access_lease_manager,lease.manager,model_real_estate_lease,real_estate.group_property_manager,1,1,1,1
+access_tenant_manager,tenant.manager,model_real_estate_tenant,real_estate.group_property_manager,1,1,1,1
+access_maintenance_manager,maintenance.manager,model_maintenance_request,real_estate.group_property_manager,1,1,1,1
+access_maintenance_wizard_manager,maintenance.wizard.manager,model_maintenance_request_wizard,real_estate.group_property_manager,1,1,1,0
 

@@ -1,0 +1,5 @@
+<odoo>
+    <record id="group_property_manager" model="res.groups">
+        <field name="name">Property Manager</field>
+    </record>
+</odoo>

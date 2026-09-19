@@ -26,8 +26,11 @@ Long description of module's purpose
 
     # always loaded
     'data': [
+    'security/security.xml',   
     'security/ir.model.access.csv',
     'data/ir_sequence_data.xml',
+    'wizard/maintenance.xml',
+    'views/maintenance_request.xml',
     'views/property_views.xml',
     'views/lease_view.xml',
     'views/tenant.xml',
