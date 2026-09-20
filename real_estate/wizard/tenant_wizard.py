@@ -27,7 +27,7 @@ class TenantWizard(models.TransientModel):
     def action_create_tenant(self):
         """Create a tenant and keep a link to the CRM opportunity."""
         self.ensure_one()
-        tenant = self.env['real_estate.tenant'].create({
+        tenant = self.env['real_estate.tenant'].sudo().create({
             'crm_id': self.crm_id.id,
             'name': self.name,
             'email': self.email,

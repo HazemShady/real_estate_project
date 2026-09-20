@@ -5,7 +5,7 @@ from odoo.exceptions import UserError
 class Lease(models.Model):
     _name = 'real_estate.lease'
     _description = 'Property Lease Agreement'
-
+    maintenance_ids = fields.One2many('maintenance.request', 'lease_id', string='Maintenance') 
     name = fields.Char(string='Lease Reference', required=True)
     property_id = fields.Many2one(
         'real_estate.property',
@@ -14,6 +14,7 @@ class Lease(models.Model):
         ondelete='cascade',
         index=True,
     )
+    notes = fields.Text(string='Notes')
     tenant_id = fields.Many2one(
         'real_estate.tenant',
         string='Tenant',

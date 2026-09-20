@@ -11,6 +11,7 @@ class Tenant(models.Model):
     name = fields.Char(string='Tenant Name', required=True, index=True)
     email = fields.Char(string='Email', required=True, index=True)
     phone = fields.Char(string='Phone Number')
+    lease_ids = fields.One2many('real_estate.lease', 'tenant_id', string='Leases') 
     mobile = fields.Char(string='Mobile Number')
     city = fields.Char(string='City')
     date_joined = fields.Date(string='Date Joined', default=fields.Date.today, readonly=True)
@@ -27,7 +28,11 @@ class Tenant(models.Model):
     
     
   
-    crm_id= fields.Many2one('crm.lead', string='CRM Lead',)
+    crm_id = fields.Many2one(
+        'crm.lead',
+        string='CRM Lead',
+        ondelete='set null',
+    )
     website_id = fields.Many2one('website', string='Website',)
   
 

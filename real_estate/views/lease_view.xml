@@ -53,6 +53,22 @@
                             <field name="end_date"/>
                         </group>
                     </group>
+                
+                <notebook>
+                    <page string="Notes">
+                        <field name="notes"/>
+                    </page>
+                    <page string="Maintenance Requests">
+                            <field name="maintenance_ids">
+                                <tree create="false" delete="false">
+                                    <field name="name"/>
+                                    <field name="issue_type"/>
+                                    <field name="urgency"/>
+                                    <field name="create_date"/>
+                                </tree>
+                            </field>                                
+                        </page>
+                </notebook>
                 </sheet>
             </form>
         </field>

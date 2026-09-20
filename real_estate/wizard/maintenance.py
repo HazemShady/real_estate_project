@@ -53,13 +53,10 @@ class MaintenanceRequestWizard(models.TransientModel):
         
         # 3. Return action to close wizard and show confirmation
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Request Submitted',
-                'message': 'Your maintenance request has been submitted successfully and the manager has been notified.',
-                'type': 'success',
-                'sticky': False,
-                'next': {'type': 'ir.actions.act_window_close'},
-            },
+            'type': 'ir.actions.act_window',
+                        'name': 'Maintenance Request',
+                        'res_model': 'maintenance.request',
+                        'res_id': maintenance_request.id,
+                        'view_mode': 'form',
+                        'target': 'current',
         }

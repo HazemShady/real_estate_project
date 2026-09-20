@@ -43,16 +43,28 @@
                         <group string="Additional Information">
                             <field name="date_joined"/>
                             <field name="active"/>
-                            <field name="crm_id"/>
+                            <field name="crm_id" readonly="1"/>
                         </group>
                     </group>
 
                     <notebook>
+                    
                         <page name="info" string="Info">
                             <group>
                                 <field name="notes"/>
                             </group>
                         </page>
+                        <page string="Leases">
+                            <field name="lease_ids">
+                                <tree create="false" delete="false">
+                                    <field name="name"/>
+                                    <field name="tenant_id"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                </tree>
+                            </field>                                
+                        </page>
+
                     </notebook>
                 </sheet>
             </form>

@@ -35,6 +35,7 @@
         name="Maintenance"
         parent="menu_real_estate_root"
         action="action_maintenance"
+        groups="real_estate.group_maintenance,real_estate.group_maintenance_request"
         sequence="40"/>
 
         
