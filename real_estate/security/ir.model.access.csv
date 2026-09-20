@@ -1,10 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_property_manager,property.manager,model_real_estate_property,real_estate.group_property_manager,1,1,1,1
 access_lease_manager,lease.manager,model_real_estate_lease,real_estate.group_property_manager,1,1,1,1
-access_tenant_manager,tenant.manager,model_real_estate_tenant,real_estate.group_property_manager,1,1,1,1
+access_tenant_manager,tenant.manager,model_real_estate_tenant,real_estate.group_property_manager,1,1,0,1
 access_maintenance_manager,maintenance.manager,model_maintenance_request,real_estate.group_property_manager,1,1,1,1
 access_maintenance_wizard_manager,maintenance.wizard.manager,model_maintenance_request_wizard,real_estate.group_property_manager,1,1,1,0
 access_lease_wizard_property_manager,lease.wizard.property.manager,model_real_estate_lease_wizard,real_estate.group_property_manager,1,1,1,1
 access_lease_wizard_agent,lease.wizard.agent,model_real_estate_lease_wizard,real_estate.group_lease_manager,1,1,1,1
 access_lease_wizard_manager,lease.wizard.manager,model_real_estate_lease_wizard,real_estate.group_lease_manager,1,1,1,1
-
+access_tenant_wizard_manager,tenant.wizard.manager,model_real_estate_tenant_wizard,real_estate.group_property_manager,1,1,0,1
+access_tenant_create_from_crm,tenant.create.from.crm,model_real_estate_tenant,real_estate.group_property_manager,1,1,0,1

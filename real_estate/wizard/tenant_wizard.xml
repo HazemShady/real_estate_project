@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_real_estate_tenant_wizard_form" model="ir.ui.view">
+        <field name="name">real_estate.tenant.wizard.form</field>
+        <field name="model">real_estate.tenant.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Tenant">
+                <group>
+                    <field name="crm_id"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="email" widget="email"/>
+                        <field name="phone"/>
+                        <field name="mobile"/>
+                    </group>
+                    <group>
+                        <field name="city"/>
+                        <field name="date_of_birth"/>
+                        <field name="age_category"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="notes" placeholder="Internal notes..."/>
+                </group>
+                <footer>
+                    <button name="action_create_tenant" string="Create Tenant" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
