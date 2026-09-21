@@ -68,3 +68,15 @@ class Property(models.Model):
                 raise UserError("You cannot edit bedrooms while the property is unavailable.")
 
         return super(Property, self).write(vals)
+    def action_show_leases(self):
+        """Action to show leases related to the property."""
+        self.ensure_one()
+        return {
+            'name': 'Leases',
+            'type': 'ir.actions.act_window',
+            'res_model': 'real_estate.lease',
+            'view_mode': 'tree,form',
+            'domain': [('property_id', '=', self.id)],
+            'context': {'default_property_id': self.id},
+        }
+            

@@ -24,6 +24,11 @@ class MaintenanceRequestWizard(models.TransientModel):
     ], default='medium', required=True)
     
     preferred_date = fields.Date()
+    electricity_bill_date = fields.Date(
+        string='Electricity Bill Date',
+        required=True,
+        default=lambda self: self.env.context.get('default_electricity_bill_date'),
+    )
     tenant_phone = fields.Char()
     
     def action_submit_request(self):
@@ -37,6 +42,7 @@ class MaintenanceRequestWizard(models.TransientModel):
             'issue_type': self.issue_type,
             'description': self.description,
             'urgency': self.urgency,
+            'electricity_bill_date': self.electricity_bill_date,
             'preferred_date': self.preferred_date,
             'tenant_phone': self.tenant_phone,
             'state': 'submitted',

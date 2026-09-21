@@ -24,8 +24,9 @@
         <field name="arch" type="xml">
             <form string="Lease">
                 <header>
+                    <button name="action_create_electricity_bill" string="Create Electricity Bill" type="object" class="oe_highlight"/>
                     <button name="action_set_active" string="Set Active" invisible="state == 'active'" type="object" class="oe_highlight"/>
-                    <button name="%(real_estate.action_maintenance_request_wizard)d" string="Maintenance Request" type="action" context="{'default_lease_id': active_id}" invisible="state != 'active'"/>
+                    <button name="%(real_estate.action_maintenance_request_wizard)d" string="Maintenance Request" type="action" context="{'default_lease_id': active_id, 'default_electricity_bill_date': start_date}" invisible="state != 'active'"/>
                     <button name="set_back_to_draft" string="Set Draft" invisible="state == 'draft'" type="object"/>
                     <button name="action_set_at_risk" string="Set At Risk" invisible="state == 'at_risk'" type="object"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired,cancelled"/>
@@ -46,11 +47,16 @@
                         </group>
                         <group string="Financial Details">
                             <field name="monthly_rent"/>
+                            <field name="total_cost"/>
                             <field name="deposit_paid"/>
                         </group>
                         <group string="Lease Details">
                             <field name="start_date"/>
                             <field name="end_date"/>
+                            <field name="electricity_bill_ids"/>
+                            <field name="duration_months"/>
+                            <field name="is_active"/>
+                            <field name= "tenant_age"/>
                         </group>
                     </group>
                 
@@ -86,4 +92,3 @@
         </field>
     </record>
 </odoo>
-

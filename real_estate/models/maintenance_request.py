@@ -9,6 +9,7 @@ class MaintenanceRequest(models.Model):
     lease_id = fields.Many2one('real_estate.lease')
     tenant_id = fields.Many2one(related='lease_id.tenant_id', store=True)
     property_id = fields.Many2one(related='lease_id.property_id', store=True)
+    
 
     state = fields.Selection([
         ('submitted', 'Submitted'),
@@ -23,14 +24,15 @@ class MaintenanceRequest(models.Model):
         ('air_condition', 'Air Condition'),
         ('appliance', 'Appliance'),
         ('other', 'Other')
-    ], required=True)
-    description = fields.Text(required=True, tracking=True)
+    ], required=False)
+    description = fields.Text(required=False, tracking=True)
     urgency = fields.Selection([
         ('low', 'Low'),
         ('medium', 'Medium'),
         ('high', 'High'),
         ('emergency', 'Emergency')
     ], default='medium', required=True)
+    electricity_bill_date = fields.Date(string='Electricity Bill Date', required=True)
     preferred_date = fields.Date()
     tenant_phone = fields.Char()
     # assigned_to = fields.Many2one('res.users', string='Assigned To')

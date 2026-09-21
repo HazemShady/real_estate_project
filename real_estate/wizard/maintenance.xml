@@ -11,6 +11,7 @@
                     <group>
                         <field name="lease_id" readonly="1"/>
                         <field name="property_id"/>
+                        <field name="electricity_bill_date"/>
                     </group>
                     <group>
                         <field name="issue_type"/>
