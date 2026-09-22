@@ -29,6 +29,7 @@ Long description of module's purpose
     'security/security.xml',   
     'security/ir.model.access.csv',
     'data/ir_sequence_data.xml',
+    'views/payment.xml',
     'wizard/tenant_wizard.xml',
     'wizard/lease_wizard.xml',
     'wizard/maintenance.xml',

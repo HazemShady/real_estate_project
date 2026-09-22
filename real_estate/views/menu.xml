@@ -30,6 +30,13 @@
         parent="menu_real_estate_root"
         action="action_tenant"
         sequence="30"/>
+    <!-- Payments Menu -->
+    <menuitem
+        id="menu_lease_payment"
+        name="Payments"
+        parent="menu_real_estate_root"
+        action="action_lease_payment"
+        sequence="50"/>
     <menuitem
         id="menu_maintenance"
         name="Maintenance"

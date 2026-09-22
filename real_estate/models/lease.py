@@ -7,7 +7,6 @@ class Lease(models.Model):
     _name = 'real_estate.lease'
     _description = 'Property Lease Agreement'
     maintenance_ids = fields.One2many('maintenance.request', 'lease_id', string='Maintenance') 
-    total_cost = fields.Float(string='Total Maintenance Cost', compute='_compute_total_cost', store=True)
     electricity_bill_ids = fields.Date(string='Electricity Bill Dates', onchange='_onchange_electricity_bill_ids')
     name = fields.Char(string='Lease Reference', required=True)
     property_id = fields.Many2one(
@@ -149,12 +148,30 @@ class Lease(models.Model):
                 'sticky': False,
             },
         }
+    total_cost = fields.Float(compute='_compute_total_cost', string='Total Cost')
+    plumbing_cost = fields.Float(string='Plumbing Cost')
+    electrical_cost = fields.Float(string='Electrical Cost')
+    air_condition_cost = fields.Float(string='Air Condition Cost')
+    appliance_cost = fields.Float(string='Appliance Cost')
+    other_cost = fields.Float(string='Other Cost')
    
-    @api.depends('maintenance_ids.actual_cost')
+
+    @api.depends(
+        'plumbing_cost',
+        'electrical_cost',
+        'air_condition_cost',
+        'appliance_cost',
+        'other_cost',
+    )
     def _compute_total_cost(self):
         for lease in self:
-            # 1
-             lease.total_cost = sum(maintenance.actual_cost for maintenance in lease.maintenance_ids)
+            lease.total_cost = sum((
+                lease.plumbing_cost,
+                lease.electrical_cost,
+                lease.air_condition_cost,
+                lease.appliance_cost,
+                lease.other_cost,
+            ))
 
             # 2
             # lease.total_cost = 0

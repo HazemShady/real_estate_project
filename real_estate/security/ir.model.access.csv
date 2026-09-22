@@ -10,3 +10,4 @@ access_lease_wizard_property_manager,lease.wizard.property.manager,model_real_es
 access_lease_wizard_agent,lease.wizard.agent,model_real_estate_lease_wizard,real_estate.group_lease_manager,1,1,1,1
 access_lease_wizard_manager,lease.wizard.manager,model_real_estate_lease_wizard,real_estate.group_lease_manager,1,1,1,1
 access_tenant_wizard_property_manager,tenant.wizard.property.manager,model_real_estate_tenant_wizard,real_estate.group_property_manager,1,1,1,1
+access_lease_payment_manager,lease.payment.manager,model_lease_payment,real_estate.group_property_manager,1,1,1,1

@@ -65,6 +65,7 @@
                 </header>
 
                 <sheet>
+                    <field name="property_image" widget="image" class="oe_right oe_avatar" options="{'size': [120, 120]}"/>
                     <div class="oe_button_box" name="button_box">
                     <button name="action_show_leases" type="object" icon="fa-user" invisible="not lease_ids">
                         <field name="lease_ids" widget="statinfo" string="Leases"/>

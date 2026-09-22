@@ -10,6 +10,7 @@ class Property(models.Model):
     name = fields.Char(string='Property Name', required=True, index=True)
     description = fields.Text(string='Description')
     price = fields.Float(string='Monthly Rent', required=True)
+    property_image = fields.Binary(string='Property Image')
     bedrooms = fields.Integer(string='Bedrooms', default=1)
     available = fields.Boolean(string='Available', default=True, index=True)
     lease_ids = fields.One2many('real_estate.lease', 'property_id', string='Leases') 

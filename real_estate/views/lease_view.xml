@@ -47,7 +47,12 @@
                         </group>
                         <group string="Financial Details">
                             <field name="monthly_rent"/>
-                            <field name="total_cost"/>
+                            <field name="total_cost" decoration-danger="1"/>
+                            <field name="plumbing_cost"/>
+                            <field name="electrical_cost"/>
+                            <field name="air_condition_cost"/>
+                            <field name="appliance_cost"/>
+                            <field name="other_cost"/>
                             <field name="deposit_paid"/>
                         </group>
                         <group string="Lease Details">
