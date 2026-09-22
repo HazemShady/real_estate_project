@@ -1,4 +1,5 @@
 
+# -*- coding: utf-8 -*-
 from odoo import fields, models
 from odoo.exceptions import UserError
 
@@ -6,15 +7,15 @@ from odoo.exceptions import UserError
 class Property(models.Model):
     _name = 'real_estate.property'
     _description = 'Real Estate Property'
+    _order = 'name'
 
+    # ============================================================
+    # Property Information
+    # Fields related to the basic property information
+    # ============================================================
     name = fields.Char(string='Property Name', required=True, index=True)
     description = fields.Text(string='Description')
-    price = fields.Float(string='Monthly Rent', required=True)
     property_image = fields.Binary(string='Property Image')
-    bedrooms = fields.Integer(string='Bedrooms', default=1)
-    available = fields.Boolean(string='Available', default=True, index=True)
-    lease_ids = fields.One2many('real_estate.lease', 'property_id', string='Leases') 
-    agent_id = fields.Many2one('res.users', string='Sales Person')
     property_type = fields.Selection(
         [
             ('apartment', 'Apartment'),
@@ -25,50 +26,49 @@ class Property(models.Model):
         string='Property Type',
         required=True,
     )
-    deposit = fields.Float(required=True)
+    bedrooms = fields.Integer(string='Bedrooms', default=1)
 
-    def mark_as_occupied(self):
-        """Mark property as no longer available."""
-        for record in self:
-            record.write({'available': False, 'price': record.price + 1000})
+    # ============================================================
+    # Financial Information
+    # Fields related to pricing and deposits
+    # ============================================================
+    price = fields.Float(string='Monthly Rent', required=True)
+    deposit = fields.Float(string='Deposit Amount', required=True)
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency',
+        default=lambda self: self.env.company.currency_id,
+    )
 
-    def mark_as_available(self):
-        """Mark property as available."""
-        for record in self:
-            record.write({'available': True})
+    # ============================================================
+    # Status & Availability
+    # Fields for tracking property status
+    # ============================================================
+    available = fields.Boolean(string='Available', default=True, index=True)
 
-    def add_text(self):
-        """Add text to the description field."""
-        for record in self:
-            record.write({'description': record.description + ' Description '})
+    # ============================================================
+    # Relationships
+    # Relational fields to other models
+    # ============================================================
+    agent_id = fields.Many2one('res.users', string='Sales Person', index=True)
+    lease_ids = fields.One2many('real_estate.lease', 'property_id', string='Leases')
 
-    def increse_deposit(self):
-        """Increase deposit by 10%."""
-        for record in self:
-            record.write({'deposit': record.deposit + 1000})
-
-    def add_bedroom(self):
-        """Add a bedroom to the property."""
-        for record in self:
-            record.write({'bedrooms': record.bedrooms + 1})
-
-    def mark_as_villa(self):
-        """Change the property type to Villa."""
-        for record in self:
-            if record.available:
-                record.write({'property_type': 'villa'})
-
-    def get_agent_name(self):
-        for record in self:
-            record.write({'description': record.agent_id.name}) 
-    
+    # ============================================================
+    # Constraints & Overrides
+    # ============================================================
     def write(self, vals):
+        """Prevent editing bedrooms when property is unavailable."""
         if 'bedrooms' in vals:
-            available = vals.get('available', self.available)
-            if available is False and vals.get('bedrooms') != self.bedrooms:
-                raise UserError("You cannot edit bedrooms while the property is unavailable.")
-
+            # Check if any record in self is unavailable
+            for record in self:
+                new_available = vals.get('available', record.available)
+                if new_available is False and vals.get('bedrooms') != record.bedrooms:
+                    raise UserError("You cannot edit bedrooms while the property is unavailable.")
         return super(Property, self).write(vals)
+
+    # ============================================================
+    # Actions
+    # ============================================================
     def action_show_leases(self):
         """Action to show leases related to the property."""
         self.ensure_one()
@@ -80,4 +80,9 @@ class Property(models.Model):
             'domain': [('property_id', '=', self.id)],
             'context': {'default_property_id': self.id},
         }
+
+    def action_toggle_availability(self):
+        """Toggle the property availability status."""
+        for record in self:
+            record.write({'available': not record.available})
             

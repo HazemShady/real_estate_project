@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Tenant List View (Tree) -->
+    <!-- ============================================================
+    Tenant List View (Tree)
+    ============================================================ -->
     <record id="view_tenant_tree" model="ir.ui.view">
         <field name="name">real_estate.tenant.tree</field>
         <field name="model">real_estate.tenant</field>
@@ -11,69 +13,78 @@
                 <field name="mobile"/>
                 <field name="city"/>
                 <field name="date_joined"/>
+                <field name="active"/>
             </tree>
         </field>
     </record>
 
-    <!-- Tenant Form View -->
+    <!-- ============================================================
+    Tenant Form View
+    ============================================================ -->
     <record id="view_tenant_form" model="ir.ui.view">
         <field name="name">real_estate.tenant.form</field>
         <field name="model">real_estate.tenant</field>
         <field name="arch" type="xml">
             <form string="Tenant">
                 <header>
-                    <button name="update_notes" string="Update Notes" type="object" class="oe_highlight"/>
-                    <button name="update_CRM_Notes" string="Update CRM Notes" type="object" class="oe_highlight"/>
-                    <button name="update_Website_Notes" string="Update Website Notes" type="object" class="oe_highlight"/>
+                    <button name="action_toggle_active" string="Toggle Active" type="object" class="oe_highlight"/>
+                    <field name="active" widget="boolean_button" options="{'terminology': 'active'}" invisible="1"/>
                 </header>
 
                 <sheet>
-                    <h1>
-                        <field name="name" placeholder="Tenant Name" size="40" string="Tenant Name" label="Name"/>
-                    </h1>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Tenant Name" size="40"/>
+                        </h1>
+                    </div>
 
-                    <group string="Tenant Information">
+                    <group string="Contact Information">
                         <group>
-                            <field name="email"/>
+                            <field name="email" widget="email"/>
+                            <field name="phone"/>
+                        </group>
+                        <group>
                             <field name="mobile"/>
                             <field name="city"/>
+                        </group>
+                    </group>
+
+                    <group string="Personal Details">
+                        <group>
+                            <field name="date_of_birth"/>
                             <field name="age_category"/>
                         </group>
-
-                        <group string="Additional Information">
-                            <field name="date_joined"/>
-                            <field name='date_of_birth'/>
-
-                            <field name="active"/>
+                        <group>
+                            <field name="date_joined" readonly="1"/>
                             <field name="crm_id" readonly="1"/>
                         </group>
                     </group>
 
                     <notebook>
-                    
-                        <page name="info" string="Info">
-                            <group>
-                                <field name="notes"/>
-                            </group>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Internal notes..."/>
                         </page>
                         <page string="Leases">
                             <field name="lease_ids">
                                 <tree create="false" delete="false">
                                     <field name="name"/>
-                                    <field name="tenant_id"/>
+                                    <field name="property_id"/>
                                     <field name="start_date"/>
                                     <field name="end_date"/>
+                                    <field name="state"/>
+                                    <field name="monthly_rent"/>
                                 </tree>
-                            </field>                                
+                            </field>
                         </page>
-
                     </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- Tenant Search View -->
+    <!-- ============================================================
+    Tenant Search View
+    ============================================================ -->
     <record id="view_tenant_search" model="ir.ui.view">
         <field name="name">real_estate.tenant.search</field>
         <field name="model">real_estate.tenant</field>
@@ -87,25 +98,25 @@
                 <field name="date_joined"/>
                 <field name="age_category"/>
                 <field name="crm_id"/>
-                <field name="website_id"/>
                 <separator/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
                 <filter string="Has Mobile" name="has_mobile" domain="[('mobile', '!=', False)]"/>
                 <filter string="Has CRM Lead" name="has_crm" domain="[('crm_id', '!=', False)]"/>
-                <filter string="Has Website" name="has_website" domain="[('website_id', '!=', False)]"/>
+                <separator/>
                 <group expand="0" string="Group By">
                     <filter string="City" name="group_by_city" context="{'group_by': 'city'}"/>
                     <filter string="Date Joined" name="group_by_date_joined" context="{'group_by': 'date_joined'}"/>
                     <filter string="Age Category" name="group_by_age_category" context="{'group_by': 'age_category'}"/>
                     <filter string="CRM Lead" name="group_by_crm" context="{'group_by': 'crm_id'}"/>
-                    <filter string="Website" name="group_by_website" context="{'group_by': 'website_id'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <!-- Tenant Kanban View -->
+    <!-- ============================================================
+    Tenant Kanban View
+    ============================================================ -->
     <record id="view_tenant_kanban" model="ir.ui.view">
         <field name="name">real_estate.tenant.kanban</field>
         <field name="model">real_estate.tenant</field>
@@ -113,7 +124,11 @@
             <kanban>
                 <field name="name"/>
                 <field name="email"/>
+                <field name="mobile"/>
+                <field name="city"/>
                 <field name="date_joined"/>
+                <field name="active"/>
+
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
@@ -125,7 +140,18 @@
                                     <field name="email" widget="email"/>
                                 </div>
                                 <div class="text-muted mt-1">
-                                    Joined: <field name="date_joined"/>
+                                    <field name="mobile"/>
+                                </div>
+                                <div class="text-muted mt-1">
+                                    <field name="city"/>
+                                </div>
+                                <div class="text-muted mt-1">
+                                    <t t-if="record.active.raw_value">
+                                        <span class="badge bg-success">Active</span>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    </t>
                                 </div>
                             </div>
                         </div>
@@ -135,10 +161,17 @@
         </field>
     </record>
 
-    <!-- Tenant action -->
+    <!-- ============================================================
+    Tenant Action
+    ============================================================ -->
     <record id="action_tenant" model="ir.actions.act_window">
         <field name="name">Tenants</field>
         <field name="res_model">real_estate.tenant</field>
-        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first tenant
+            </p>
+        </field>
     </record>
 </odoo>

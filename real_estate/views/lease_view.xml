@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Lease Tree View -->
-    <record id="leses_view_tree" model="ir.ui.view">
-        <field name="name">lease.tree</field>
+    <!-- ============================================================
+    Lease List View (Tree)
+    ============================================================ -->
+    <record id="view_lease_tree" model="ir.ui.view">
+        <field name="name">real_estate.lease.tree</field>
         <field name="model">real_estate.lease</field>
         <field name="arch" type="xml">
-            <tree string="Leases">
+            <tree string="Leases" decoration-info="state=='active'" decoration-warning="state=='at_risk'" decoration-danger="state=='expired' or state=='cancelled'">
                 <field name="name"/>
                 <field name="state"/>
                 <field name="property_id"/>
@@ -13,87 +15,202 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="monthly_rent"/>
+                <field name="duration_months"/>
+                <field name="is_active"/>
             </tree>
         </field>
     </record>
 
-    <!-- Lease Form View -->
-    <record id="lease_view_form" model="ir.ui.view">
-        <field name="name">lease.form</field>
+    <!-- ============================================================
+    Lease Search View
+    ============================================================ -->
+    <record id="view_lease_search" model="ir.ui.view">
+        <field name="name">real_estate.lease.search</field>
+        <field name="model">real_estate.lease</field>
+        <field name="arch" type="xml">
+            <search string="Search Leases">
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="tenant_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <separator/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Active" name="filter_active" domain="[('state', '=', 'active')]"/>
+                <filter string="At Risk" name="filter_at_risk" domain="[('state', '=', 'at_risk')]"/>
+                <filter string="Expired" name="filter_expired" domain="[('state', '=', 'expired')]"/>
+                <filter string="Cancelled" name="filter_cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="State" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Property" name="group_by_property" context="{'group_by': 'property_id'}"/>
+                    <filter string="Tenant" name="group_by_tenant" context="{'group_by': 'tenant_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================
+    Lease Form View
+    ============================================================ -->
+    <record id="view_lease_form" model="ir.ui.view">
+        <field name="name">real_estate.lease.form</field>
         <field name="model">real_estate.lease</field>
         <field name="arch" type="xml">
             <form string="Lease">
                 <header>
                     <button name="action_create_electricity_bill" string="Create Electricity Bill" type="object" class="oe_highlight"/>
                     <button name="action_set_active" string="Set Active" invisible="state == 'active'" type="object" class="oe_highlight"/>
-                    <button name="%(real_estate.action_maintenance_request_wizard)d" string="Maintenance Request" type="action" context="{'default_lease_id': active_id, 'default_electricity_bill_date': start_date}" invisible="state != 'active'"/>
-                    <button name="set_back_to_draft" string="Set Draft" invisible="state == 'draft'" type="object"/>
-                    <button name="action_set_at_risk" string="Set At Risk" invisible="state == 'at_risk'" type="object"/>
+                    <button name="action_set_at_risk" string="Set At Risk" invisible="state == 'at_risk'" type="object" class="oe_highlight"/>
+                    <button name="set_back_to_draft" string="Set to Draft" invisible="state == 'draft'" type="object"/>
+                    <button name="%(real_estate.action_maintenance_request_wizard)d" string="Maintenance Request" type="action" context="{'default_lease_id': active_id, 'default_electricity_bill_date': electricity_bill_date}" invisible="state != 'active'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired,cancelled"/>
                 </header>
 
                 <sheet>
                     <div class="oe_title">
                         <h1>
-                            <field name="name"/>
+                            <field name="name" readonly="1"/>
                         </h1>
                     </div>
 
-                    <group>
-                        <group string="Lease Information">
-                            <field name="property_id"/>
-                            <field name="tenant_id"/>
-                            <field name="state"/>
+                    <group string="Lease Overview">
+                        <group string="Parties">
+                            <field name="property_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="tenant_id" options="{'no_open': True, 'no_create': True}"/>
                         </group>
-                        <group string="Financial Details">
+                        <group string="Dates">
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="duration_months" readonly="1"/>
+                            <field name="is_active" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Financial Details">
+                        <group string="Rent &amp; Deposit">
                             <field name="monthly_rent"/>
-                            <field name="total_cost" decoration-danger="1"/>
+                            <field name="deposit_paid"/>
+                        </group>
+                        <group string="Maintenance Costs">
                             <field name="plumbing_cost"/>
                             <field name="electrical_cost"/>
                             <field name="air_condition_cost"/>
                             <field name="appliance_cost"/>
                             <field name="other_cost"/>
-                            <field name="deposit_paid"/>
-                        </group>
-                        <group string="Lease Details">
-                            <field name="start_date"/>
-                            <field name="end_date"/>
-                            <field name="electricity_bill_ids"/>
-                            <field name="duration_months"/>
-                            <field name="is_active"/>
-                            <field name= "tenant_age"/>
+                            <field name="total_cost" readonly="1" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
                         </group>
                     </group>
-                
-                <notebook>
-                    <page string="Notes">
-                        <field name="notes"/>
-                    </page>
-                    <page string="Maintenance Requests">
+
+                    <group string="Electricity Bill">
+                        <group>
+                            <field name="electricity_bill_date"/>
+                            <field name="tenant_age" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Additional notes..."/>
+                        </page>
+                        <page string="Maintenance Requests">
                             <field name="maintenance_ids">
                                 <tree create="false" delete="false">
                                     <field name="name"/>
                                     <field name="issue_type"/>
                                     <field name="urgency"/>
+                                    <field name="state"/>
+                                    <field name="scheduled_date"/>
                                     <field name="create_date"/>
                                 </tree>
-                            </field>                                
+                            </field>
                         </page>
-                </notebook>
+                        <page string="Payments">
+                            <field name="payment_ids">
+                                <tree create="false" delete="false">
+                                    <field name="name"/>
+                                    <field name="due_date"/>
+                                    <field name="amount"/>
+                                    <field name="late_fee"/>
+                                    <field name="total_amount"/>
+                                    <field name="payment_date"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- Lease Action -->
+    <!-- ============================================================
+    Lease Kanban View
+    ============================================================ -->
+    <record id="view_lease_kanban" model="ir.ui.view">
+        <field name="name">real_estate.lease.kanban</field>
+        <field name="model">real_estate.lease</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="property_id"/>
+                <field name="tenant_id"/>
+                <field name="monthly_rent"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="mt-1">
+                                    <span class="badge" t-attf-class="#{record.state.raw_value == 'active' ? 'bg-success' : (record.state.raw_value == 'draft' ? 'bg-secondary' : (record.state.raw_value == 'at_risk' ? 'bg-warning' : 'bg-danger'))}">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                                <div class="text-muted mt-1">
+                                    <field name="property_id"/> | <field name="tenant_id"/>
+                                </div>
+                                <div class="text-muted mt-1">
+                                    Rent: <field name="monthly_rent" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                </div>
+                                <div class="text-muted mt-1">
+                                    <field name="start_date"/> - <field name="end_date"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ============================================================
+    Lease Action
+    ============================================================ -->
     <record id="action_lease" model="ir.actions.act_window">
         <field name="name">Leases</field>
         <field name="res_model">real_estate.lease</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Create your first lease info
+                Create your first lease
             </p>
         </field>
+    </record>
+     <record id="ir_cron_auto_expire_leases" model="ir.cron">
+        <field name="name">Real Estate: Auto Expire Leases</field>
+        <field name="model_id" ref="model_real_estate_lease"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_auto_expire_leases()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="active" eval="True"/>
     </record>
 </odoo>

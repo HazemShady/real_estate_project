@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Property List View (Tree) -->
+    <!-- ============================================================
+    Property List View (Tree)
+    ============================================================ -->
     <record id="view_property_tree" model="ir.ui.view">
         <field name="name">real_estate.property.tree</field>
         <field name="model">real_estate.property</field>
         <field name="arch" type="xml">
             <tree string="Properties">
                 <field name="name"/>
+                <field name="property_type"/>
                 <field name="price"/>
                 <field name="bedrooms"/>
                 <field name="available"/>
-                <field name="description"/>
-                <field name="create_date"/>
-                <field name="create_uid"/>
                 <field name="agent_id"/>
+                <field name="create_date"/>
             </tree>
         </field>
     </record>
 
-    <!-- Property Search View -->
+    <!-- ============================================================
+    Property Search View
+    ============================================================ -->
     <record id="view_property_search" model="ir.ui.view">
         <field name="name">real_estate.property.search</field>
         <field name="model">real_estate.property</field>
@@ -42,37 +45,32 @@
         </field>
     </record>
 
-    <!-- Property Form View -->
+    <!-- ============================================================
+    Property Form View
+    ============================================================ -->
     <record id="view_property_form" model="ir.ui.view">
         <field name="name">real_estate.property.form</field>
         <field name="model">real_estate.property</field>
         <field name="arch" type="xml">
             <form string="Property">
-          
                 <header>
-                    <button type="action" name="%(action_real_estate_lease_wizard)d"
+                    <button name="%(action_real_estate_lease_wizard)d"
                             string="Create Lease"
+                            type="action"
                             context="{'default_property_id': active_id}"
                             class="oe_highlight"/>
-                    <button name="mark_as_occupied" string="Mark as Occupied" type="object" invisible="not available" class="oe_highlight"/>
-                    <button name="mark_as_available" string="Mark as Available" type="object" invisible="available" class="oe_highlight"/>
-                    <button name="add_text" string="Add Text" type="object" class="oe_highlight"/>
-                    <button name="increse_deposit" string="Increase Deposit" type="object" class="oe_highlight"/>
-                    <button name="add_bedroom" string="Add Bedroom" type="object" invisible="available" class="oe_highlight"/>
-                    <button name="mark_as_villa" string="Mark as Villa" type="object" class="oe_highlight"/>
-                    <button name="get_agent_name" string="Get Agent Name" type="object" class="oe_highlight"/>
-                    <field name="available" invisible="1"/>
-                </header>
+                     <button name="action_toggle_availability"
+                             string="Toggle Availability"
+                             type="object"
+                             class="oe_highlight"/>
+                 </header>
 
                 <sheet>
                     <field name="property_image" widget="image" class="oe_right oe_avatar" options="{'size': [120, 120]}"/>
                     <div class="oe_button_box" name="button_box">
-                    <button name="action_show_leases" type="object" icon="fa-user" invisible="not lease_ids">
-                        <field name="lease_ids" widget="statinfo" string="Leases"/>
-                        
-                     </button>
-                
-                    
+                        <button name="action_show_leases" type="object" icon="fa-home" invisible="not lease_ids">
+                            <field name="lease_ids" widget="statinfo" string="Leases"/>
+                        </button>
                     </div>
                     <div class="oe_title">
                         <h1>
@@ -88,11 +86,11 @@
                         <group>
                             <field name="price"/>
                             <field name="deposit" string="Deposit Amount"/>
-                            <!-- <field name="agent_id"/> -->
+                            <field name="agent_id"/>
                         </group>
                     </group>
 
-                    <group>
+                    <group string="Additional Information">
                         <group>
                             <field name="bedrooms"/>
                             <field name="create_date" readonly="1"/>
@@ -101,42 +99,41 @@
                     </group>
 
                     <notebook>
-                        <!-- <page string="Description">
-                            <field name="description"/>
-                        </page> -->
-                        <page string="Agent Name">
-                            <field name="description"/>
+                        <page string="Description">
+                            <field name="description" placeholder="Property description..."/>
                         </page>
                         <page string="Leases">
                             <field name="lease_ids">
-                                <tree create="false">
+                                <tree create="false" delete="false">
                                     <field name="name"/>
                                     <field name="tenant_id"/>
                                     <field name="start_date"/>
                                     <field name="end_date"/>
+                                    <field name="state"/>
+                                    <field name="monthly_rent"/>
                                 </tree>
-                            </field>                                
+                            </field>
                         </page>
-
                     </notebook>
-
                 </sheet>
-                
             </form>
         </field>
     </record>
 
-    <!-- Property Kanban View -->
+    <!-- ============================================================
+    Property Kanban View
+    ============================================================ -->
     <record id="view_property_kanban" model="ir.ui.view">
         <field name="name">real_estate.property.kanban</field>
         <field name="model">real_estate.property</field>
         <field name="arch" type="xml">
             <kanban>
                 <field name="name"/>
+                <field name="property_type"/>
                 <field name="price"/>
                 <field name="bedrooms"/>
                 <field name="available"/>
-                <field name="description"/>
+                <field name="property_image"/>
 
                 <templates>
                     <t t-name="kanban-box">
@@ -146,13 +143,19 @@
                                     <field name="name"/>
                                 </strong>
                                 <div class="mt-1">
-                                    Price: <field name="price"/>
+                                    <span class="badge bg-secondary"><field name="property_type"/></span>
+                                </div>
+                                <div class="mt-1 fw-bold text-primary">
+                                     Rent: <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 </div>
                                 <div class="text-muted mt-1">
-                                    Bedrooms: <field name="bedrooms"/>
-                                </div>
-                                <div class="text-muted mt-1">
-                                    Available: <field name="available"/>
+                                    Bedrooms: <field name="bedrooms"/> | 
+                                    <t t-if="record.available.raw_value">
+                                        <span class="badge bg-success">Available</span>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="badge bg-danger">Unavailable</span>
+                                    </t>
                                 </div>
                             </div>
                         </div>
@@ -162,11 +165,13 @@
         </field>
     </record>
 
-    <!-- Property Action (Links views together) -->
+    <!-- ============================================================
+    Property Action (Links views together)
+    ============================================================ -->
     <record id="action_property" model="ir.actions.act_window">
         <field name="name">Properties</field>
         <field name="res_model">real_estate.property</field>
-        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first property

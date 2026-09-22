@@ -9,12 +9,12 @@
                 <field name="name"/>
                 <field name="lease_id"/>
                 <field name="tenant_id"/>
-                <field name="property_id"/> 
+                <field name="property_id"/>
                 <field name="issue_type"/>
+                <field name="urgency"/>
+                <field name="preferred_date"/>
+                <field name="scheduled_date"/>
                 <field name="electricity_bill_date"/>
-                <field name="urgency"/> 
-                
-        
             </tree>
         </field>
     </record>
@@ -46,12 +46,11 @@
                     
                     <group>
                         <group>
-             
-                <field name="issue_type"/>
-                <field name="electricity_bill_date"/>
-                <field name="urgency"/> 
-                         
-                           
+                            <field name="issue_type"/>
+                            <field name="urgency"/>
+                            <field name="preferred_date"/>
+                            <field name="scheduled_date"/>
+                            <field name="electricity_bill_date"/>
                         </group>
                     </group>
                     <notebook>
@@ -73,6 +72,8 @@
             <p class="o_view_nocontent_smiling_face">
                 Create your first Maintenance Request
             </p>
+            
+            
         </field>
     </record>
 </odoo>

@@ -1,13 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_property_manager,property.manager,model_real_estate_property,real_estate.group_property_manager,1,1,1,1
-access_lease_manager,lease.manager,model_real_estate_lease,real_estate.group_property_manager,1,1,1,1
-access_tenant_manager,tenant.manager,model_real_estate_tenant,real_estate.group_property_manager,1,1,1,1
-access_maintenance_request_user,maintenance.request.user,model_maintenance_request,real_estate.group_maintenance,1,1,1,1
-access_maintenance_request_administrator,maintenance.request.administrator,model_maintenance_request,real_estate.group_maintenance_request,1,1,1,1
-access_maintenance_request_property_manager,maintenance.request.property.manager,model_maintenance_request,real_estate.group_property_manager,1,1,1,1
-access_maintenance_wizard_user,maintenance.request.wizard.user,model_maintenance_request_wizard,real_estate.group_maintenance,1,1,1,1
-access_lease_wizard_property_manager,lease.wizard.property.manager,model_real_estate_lease_wizard,real_estate.group_property_manager,1,1,1,1
-access_lease_wizard_agent,lease.wizard.agent,model_real_estate_lease_wizard,real_estate.group_lease_manager,1,1,1,1
-access_lease_wizard_manager,lease.wizard.manager,model_real_estate_lease_wizard,real_estate.group_lease_manager,1,1,1,1
-access_tenant_wizard_property_manager,tenant.wizard.property.manager,model_real_estate_tenant_wizard,real_estate.group_property_manager,1,1,1,1
-access_lease_payment_manager,lease.payment.manager,model_lease_payment,real_estate.group_property_manager,1,1,1,1
+access_property_manager,Property Manager,model_real_estate_property,real_estate.group_property_manager,1,1,1,1
+access_lease_manager,Lease Manager,model_real_estate_lease,real_estate.group_lease_manager,1,1,1,1
+access_tenant_manager,Tenant Manager,model_real_estate_tenant,real_estate.group_property_manager,1,1,1,1
+access_maintenance_user,Maintenance User,model_maintenance_request,real_estate.group_maintenance,1,1,1,1
+access_maintenance_admin,Maintenance Administrator,model_maintenance_request,real_estate.group_maintenance_request,1,1,1,1
+access_lease_wizard_manager,Lease Wizard Manager,model_real_estate_lease_wizard,real_estate.group_lease_manager,1,1,1,1
+access_tenant_wizard_manager,Tenant Wizard Manager,model_real_estate_tenant_wizard,real_estate.group_property_manager,1,1,1,1
+access_maintenance_wizard_user,Maintenance Wizard User,model_maintenance_request_wizard,real_estate.group_maintenance,1,1,1,1
+access_lease_payment_manager,Lease Payment Manager,model_lease_payment,real_estate.group_property_manager,1,1,1,1
