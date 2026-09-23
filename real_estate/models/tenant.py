@@ -14,6 +14,11 @@ class Tenant(models.Model):
     # ============================================================
     name = fields.Char(string='Tenant Name', required=True, index=True)
     email = fields.Char(string='Email', required=True, index=True)
+    user_id = fields.Many2one(
+        'res.users',
+        string='Related User',
+        help='User account linked to this tenant for portal access.',
+    )
     phone = fields.Char(string='Phone Number')
     mobile = fields.Char(string='Mobile Number')
     city = fields.Char(string='City')
@@ -46,7 +51,7 @@ class Tenant(models.Model):
     )
 
     _sql_constraints = [
-        ('email_unique', 'UNIQUE(email)', 'Email must be unique! This email is already registered.'),
+        ('tenant_email_unique', 'UNIQUE(email)', 'Email must be unique! This email is already registered.'),
     ]
 
     @api.constrains('date_of_birth')

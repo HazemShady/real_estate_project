@@ -238,6 +238,13 @@ class Lease(models.Model):
                 if record.end_date <= record.start_date:
                     raise ValidationError("End date must be after start date")
 
-    _sql_constraints = [
-        ('email_unique', 'UNIQUE(email)', 'Email must be unique! This email is already registered.'),
-    ]
+    @api.constrains('deposit_paid', 'property_id')
+    def _check_deposit_amount(self):
+        """Ensure the lease deposit does not exceed the required property deposit."""
+        for record in self:
+            required_deposit = record.property_id.deposit or 0.0 if record.property_id else 0.0
+            deposit_paid = record.deposit_paid or 0.0
+            if required_deposit and deposit_paid > required_deposit:
+                raise ValidationError(
+                    "The deposit paid cannot exceed the required deposit amount for this property."
+                )

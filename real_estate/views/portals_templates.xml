@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_leases" name="Tenant Portal - My Leases">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16 o_portal_portlets">
+                <div class="row">
+                    <div class="col-12">
+                        <nav class="breadcrumb" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/my/home">My Account</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Leases</li>
+                            </ol>
+                        </nav>
+                        <h1 class="mb16">My Leases</h1>
+                        <t t-if="tenant">
+                            <p>
+                                Hello <strong><t t-esc="tenant.name"/></strong>. Below are the leases linked to your tenant account.
+                            </p>
+                        </t>
+                        <t t-else="">
+                            <div class="alert alert-warning" role="alert">
+                                No tenant record is linked to your user account. Please contact your property manager to enable portal lease access.
+                            </div>
+                        </t>
+                    </div>
+                </div>
+                <t t-if="leases">
+                    <div class="row">
+                        <t t-foreach="leases" t-as="lease">
+                            <div class="col-md-6 mb16">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-2">
+                                            <t t-esc="lease.property_id.name or lease.name"/>
+                                        </h5>
+                                        <p class="text-muted mb-2">
+                                            <strong>Lease:</strong> <t t-esc="lease.name"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Property Type:</strong>
+                                            <t t-esc="lease.property_id.property_type or 'N/A'"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Monthly Rent:</strong>
+                                            <t t-esc="lease.monthly_rent"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Status:</strong>
+                                            <t t-esc="lease.state"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Start:</strong>
+                                            <t t-esc="lease.start_date or '—'"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>End:</strong>
+                                            <t t-esc="lease.end_date or '—'"/>
+                                        </p>
+                                        <t t-if="lease.property_id">
+                                            <p class="mt-2">
+                                                <a t-att-href="'/property/%d/%s' % (lease.property_id.id, lease.property_id.name and lease.property_id.name.replace(' ', '-').lower() or '')" class="btn btn-sm btn-secondary">
+                                                    View Property Details
+                                                </a>
+                                            </p>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-if="not leases">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                No leases were found for your tenant account.
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_leases_menu" name="Portal My Home: My Leases" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-set="portal_service_category_enable" t-value="True"/>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'fa fa-home'"/>
+                <t t-set="title">My Leases</t>
+                <t t-set="text">View your current leases and related property details.</t>
+                <t t-set="url" t-value="'/my/leases'"/>
+                <t t-set="config_card" t-value="True"/>
+                <t t-set="placeholder_count" t-value="'lease_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_properties" name="Salesperson Portal - My Properties">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16 o_portal_portlets">
+                <div class="row">
+                    <div class="col-12">
+                        <nav class="breadcrumb" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/my/home">My Account</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Properties</li>
+                            </ol>
+                        </nav>
+                        <h1 class="mb16">My Properties</h1>
+                        <p>
+                            Hello <strong><t t-esc="request.env.user.name"/></strong>. Below are the properties assigned to you as salesperson.
+                        </p>
+                    </div>
+                </div>
+
+                <t t-if="properties">
+                    <div class="row">
+                        <t t-foreach="properties" t-as="property_rec">
+                            <div class="col-md-6 mb16">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-2"><t t-esc="property_rec.name"/></h5>
+                                        <p class="mb-1">
+                                            <strong>Type:</strong>
+                                            <t t-esc="property_rec.property_type or 'N/A'"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Bedrooms:</strong>
+                                            <t t-esc="property_rec.bedrooms or 0"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Price:</strong>
+                                            <t t-esc="property_rec.price or 0.0"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Available:</strong>
+                                            <t t-esc="property_rec.available"/>
+                                        </p>
+                                        <p class="mt-2">
+                                            <strong>Description:</strong><br/>
+                                            <t t-esc="property_rec.description or 'No description provided.'"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+                <t t-if="not properties">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                You do not have any properties assigned to you.
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_properties_menu" name="Portal My Home: My Properties" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-set="portal_service_category_enable" t-value="True"/>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'fa fa-building'"/>
+                <t t-set="title">My Properties</t>
+                <t t-set="text">View the properties assigned to you as salesperson.</t>
+                <t t-set="url" t-value="'/my/properties'"/>
+                <t t-set="config_card" t-value="True"/>
+                <t t-set="placeholder_count" t-value="'property_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

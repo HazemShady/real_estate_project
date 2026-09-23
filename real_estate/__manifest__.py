@@ -22,13 +22,15 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','crm'],
+    'depends': ['base', 'crm', 'portal', 'website'],
 
     # always loaded
     'data': [
     'security/security.xml',   
     'security/ir.model.access.csv',
     'data/ir_sequence_data.xml',
+    "views/portals_templates _maintenance.xml",
+    'views/portals_templates.xml',
     'views/payment.xml',
     'wizard/tenant_wizard.xml',
     'wizard/lease_wizard.xml',

@@ -41,6 +41,7 @@
                     <group string="Contact Information">
                         <group>
                             <field name="email" widget="email"/>
+                            <field name="user_id"/>
                             <field name="phone"/>
                         </group>
                         <group>

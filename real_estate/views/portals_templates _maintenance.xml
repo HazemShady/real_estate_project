@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <template id="portal_my_maintenance_requests" name="My Maintenance Requests">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16 o_portal_portlets">
+                <div class="row">
+                    <div class="col-12">
+                        <nav class="breadcrumb" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/my/home">My Account</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Maintenance Requests</li>
+                            </ol>
+                        </nav>
+                        <h1 class="mb16">My Maintenance Requests</h1>
+                        <p>
+                            Hello <strong><t t-esc="request.env.user.name"/></strong>. Below are your maintenance requests.
+                        </p>
+                    </div>
+                </div>
+
+                <t t-if="maintenance_requests">
+                    <div class="row">
+                        <t t-foreach="maintenance_requests" t-as="maint_req">
+                            <div class="col-md-6 mb16">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-2"><t t-esc="maint_req.name"/></h5>
+                                        <p class="mb-1">
+                                            <strong>Property:</strong>
+                                            <t t-esc="maint_req.property_id.name or 'N/A'"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Issue Type:</strong>
+                                            <t t-esc="maint_req.issue_type"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Urgency:</strong>
+                                            <t t-esc="maint_req.urgency"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Status:</strong>
+                                            <t t-esc="maint_req.state"/>
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Preferred Date:</strong>
+                                            <t t-esc="maint_req.preferred_date or '—'"/>
+                                        </p>
+                                        <p class="mt-2">
+                                            <strong>Description:</strong><br/>
+                                            <t t-esc="maint_req.description or 'No description provided.'"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+                <t t-if="not maintenance_requests">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                You do not have any maintenance requests yet.
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_maintenance_requests_menu" name="Portal My Home: My Maintenance Requests" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-set="portal_service_category_enable" t-value="True"/>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'fa fa-wrench'"/>
+                <t t-set="title">My Maintenance Requests</t>
+                <t t-set="text">Track the status of your maintenance requests.</t>
+                <t t-set="url" t-value="'/my/maintenance'"/>
+                <t t-set="config_card" t-value="True"/>
+                <t t-set="placeholder_count" t-value="'maintenance_count'"/>
+            </t>
+        </xpath>
+    </template>
+</odoo>

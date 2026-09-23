@@ -66,12 +66,6 @@ class MaintenanceRequest(models.Model):
         ondelete='cascade',
         index=True,
     )
-    tenant_id = fields.Many2one(
-        related='lease_id.tenant_id',
-        string='Tenant',
-        store=True,
-        readonly=True,
-    )
     property_id = fields.Many2one(
         related='lease_id.property_id',
         string='Property',
@@ -85,7 +79,7 @@ class MaintenanceRequest(models.Model):
     scheduled_date = fields.Date(string='Scheduled Date', tracking=True)
     completion_date = fields.Date(string='Completion Date', readonly=True)
     preferred_date = fields.Date(string='Preferred Date')
-    # assigned_to = fields.Many2one('res.users', string='Assigned To', tracking=True)
+    assigned_to = fields.Many2one('res.users', string='Assigned To', tracking=True)
 
     # ============================================================
     # Costs & Billing
