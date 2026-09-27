@@ -59,7 +59,7 @@ class CrmLead(models.Model):
         leads_to_convert = self.search([
             ('type', '=', 'opportunity'),
             ('property_type', '!=', False),
-            ('state', '=', 'won'),
+            ('stage_id.is_won', '=', True),
         ])
         for lead in leads_to_convert:
             if not self.env['real_estate.tenant'].search([('crm_id', '=', lead.id)]):
@@ -71,4 +71,6 @@ class CrmLead(models.Model):
                     'city': lead.city,
                     'crm_id': lead.id,
                 }
+        
                 self.env['real_estate.tenant'].create(tenant_vals)
+                

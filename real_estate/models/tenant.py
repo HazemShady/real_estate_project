@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-
+from odoo.exceptions import UserError
 
 class Tenant(models.Model):
     _name = 'real_estate.tenant'
@@ -68,3 +68,19 @@ class Tenant(models.Model):
         """Toggle the tenant active status."""
         for record in self:
             record.write({'active': not record.active})
+    
+    def create_portal_user(self):
+        """Create a portal user for the tenant"""
+        for record in self:
+            if not record.user_id:
+                # Create a new user with portal access
+                new_user = self.env['res.users'].create({
+                    'name': record.name,
+                    'login': record.email,
+                    'email': record.email,
+                    'groups_id': [(6, 0, [self.env.ref('base.group_portal').id])],
+                })
+                #  # Link user to tenant
+                record.user_id = new_user.id     
+            else:
+                raise UserError("This tenant already has a portal user.")        

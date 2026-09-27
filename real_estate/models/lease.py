@@ -248,3 +248,36 @@ class Lease(models.Model):
                 raise ValidationError(
                     "The deposit paid cannot exceed the required deposit amount for this property."
                 )
+    
+    next_payment_date = fields.Date(string='Next Payment Date')
+    last_reminder_sent = fields.Date(string='Last Reminder Sent', readonly=True)
+
+    def send_reminder_email(self):
+        """Send the upcoming-payment reminder for this lease."""
+        template_xml_id = 'real_estate.email_template_payment_upcoming'
+        template = self.env.ref(template_xml_id, raise_if_not_found=False)
+        if not template:
+            return
+
+        for lease in self:
+            if not lease.tenant_id.email:
+                continue
+            template.send_mail(lease.id, force_send=True)
+            lease.last_reminder_sent = fields.Date.today()
+
+    @api.model
+    def _cron_send_payment_reminders(self):
+        """Email active leases one day before their next payment date."""
+        today = fields.Date.today()
+        tomorrow = today + timedelta(days=1)
+        leases = self.search([
+            ('state', '=', 'active'),
+            ('next_payment_date', '=', tomorrow),
+            ('last_reminder_sent', '!=', today),
+            ('tenant_id.email', '!=', False),
+        ])
+        leases.send_reminder_email()
+    
+
+    
+    

@@ -77,6 +77,11 @@ class MaintenanceRequest(models.Model):
     # Scheduling & Assignment
     # ============================================================
     scheduled_date = fields.Date(string='Scheduled Date', tracking=True)
+    reminder_sent_for_date = fields.Date(
+        string='Reminder Sent For',
+        readonly=True,
+        copy=False,
+    )
     completion_date = fields.Date(string='Completion Date', readonly=True)
     preferred_date = fields.Date(string='Preferred Date')
     assigned_to = fields.Many2one('res.users', string='Assigned To', tracking=True)
@@ -135,3 +140,29 @@ class MaintenanceRequest(models.Model):
     def action_reset_to_submitted(self):
         """Reset request back to submitted state."""
         self.write({'state': 'submitted'})
+    
+    def send_reminder_email(self):
+        """Send a reminder to each assigned user and record the date covered."""
+        template = self.env.ref(
+            'real_estate.email_template_maintenance',
+            raise_if_not_found=False,
+        )
+        if not template:
+            return
+
+        for request in self:
+            if not request.assigned_to.email:
+                request.message_post(
+                    body="Could not send reminder: Assigned user has no email."
+                )
+                continue
+            template.send_mail(request.id, force_send=True)
+
+    def _cron_auto_send_email_reminder_main(self):
+        """Remind assigned users one day before active maintenance is scheduled."""
+        tomorrow = fields.Date.today() + timedelta(days=1)
+        requests = self.search([
+            ('scheduled_date', '=', tomorrow),
+        ])
+        for main in requests:
+            main.send_reminder_email()

@@ -28,6 +28,7 @@
             <form string="Tenant">
                 <header>
                     <button name="action_toggle_active" string="Toggle Active" type="object" class="oe_highlight"/>
+                    <button name="create_portal_user"  string="Create Portal User" type="object" class="oe_highlight" />
                     <field name="active" widget="boolean_button" options="{'terminology': 'active'}" invisible="1"/>
                 </header>
 
