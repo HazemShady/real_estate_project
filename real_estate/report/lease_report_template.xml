@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_lease_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="lease">
+                <t t-set="property" t-value="lease.property_id"/>
+                <t t-set="tenant" t-value="lease.tenant_id"/>
+                <t t-set="currency" t-value="property.currency_id"/>
+                <t t-set="o" t-value="lease"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row align-items-center mb-4">
+                            <div class="col-8">
+                                <h2 class="mb-1">Lease Summary</h2>
+                                <span class="text-muted">Reference: </span>
+                                <strong t-field="lease.name"/>
+                            </div>
+                            <div class="col-4 text-end">
+                                <span class="badge rounded-pill text-bg-primary">
+                                    <span t-field="lease.state"/>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h4>Property</h4>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <th scope="row">Name</th>
+                                        <td><span t-field="property.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Type</th>
+                                        <td><span t-field="property.property_type"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Agent</th>
+                                        <td>
+                                            <span t-if="property.agent_id" t-field="property.agent_id"/>
+                                            <span t-else="">Not assigned</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <h4>Tenant</h4>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <th scope="row">Name</th>
+                                        <td><span t-field="tenant.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Email</th>
+                                        <td><span t-field="tenant.email"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Phone</th>
+                                        <td>
+                                            <span t-if="tenant.phone" t-field="tenant.phone"/>
+                                            <span t-else="">Not provided</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4>Lease Term</h4>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span t-field="lease.start_date"/></td>
+                                        <td><span t-field="lease.end_date"/></td>
+                                        <td><span t-field="lease.duration_months"/> months</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4>Financial Summary</h4>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Monthly Rent</th>
+                                        <th>Deposit Paid</th>
+                                        <th>Payments Received</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-field="lease.monthly_rent"
+                                                  t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lease.deposit_paid"
+                                                  t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="payments_received.get(lease.id, 0.0)"
+                                                  t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4>Maintenance Summary</h4>
+                            <p class="text-muted">
+                                Completed maintenance from
+                                <span t-esc="maintenance_period_start"/> to
+                                <span t-esc="maintenance_period_end"/>.
+                            </p>
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Total Maintenance Costs</th>
+                                        <td class="text-end">
+                                            <span t-esc="maintenance_costs.get(lease.id, 0.0)"
+                                                  t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

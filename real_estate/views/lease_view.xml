@@ -59,6 +59,7 @@
         <field name="arch" type="xml">
             <form string="Lease">
                 <header>
+                    <button name="%(real_estate.action_report_lease_summary)d" string="Print" type="action" class="oe_highlight"/>
                     <button name="send_reminder_email" string="Send Reminder Email" type="object" class="oe_highlight"/>
                     <button name="action_create_electricity_bill" string="Create Electricity Bill" type="object" class="oe_highlight"/>
                     <button name="action_set_active" string="Set Active" invisible="state == 'active'" type="object" class="oe_highlight"/>

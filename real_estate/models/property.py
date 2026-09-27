@@ -27,6 +27,8 @@ class Property(models.Model):
         required=True,
     )
     bedrooms = fields.Integer(string='Bedrooms', default=1)
+    bathrooms = fields.Integer(string='Bathrooms', default=1)
+    square_feet = fields.Float(string='Square Feet', default=0.0)
 
     # ============================================================
     # Financial Information
@@ -34,6 +36,12 @@ class Property(models.Model):
     # ============================================================
     price = fields.Float(string='Monthly Rent', required=True)
     deposit = fields.Float(string='Deposit Amount', required=True)
+    deposit_required = fields.Float(
+        string='Required Deposit',
+        related='deposit',
+        readonly=True,
+        store=False,
+    )
     currency_id = fields.Many2one(
         'res.currency',
         string='Currency',

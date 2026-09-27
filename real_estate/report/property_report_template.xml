@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <template id="report_property_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Property Summary: <span t-field="o.name"/></h2>
+                        
+                        <!-- Property Details -->
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Property Type:</strong>
+                                <span t-field="o.property_type"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Status:</strong>
+                                <t t-if="occupancy_rates.get(o.id, 0.0)">
+                                    <span class="badge rounded-pill text-bg-success">Available</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge rounded-pill text-bg-danger">Occupied</span>
+                                </t>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <strong>Description:</strong><br/>
+                                <span t-field="o.description"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Area:</strong>
+                                <span t-field="o.square_feet"/> sqft<br/>
+                                <strong>Bedrooms:</strong>
+                                <span t-field="o.bedrooms"/><br/>
+                                <strong>Bathrooms:</strong>
+                                <span t-field="o.bathrooms"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-4">
+                                <strong>Occupancy Rate:</strong>
+                                <span t-esc="occupancy_rates.get(o.id, 0.0)"/>%
+                            </div>
+                            <div class="col-4">
+                                <strong>Maintenance Costs (last 6 months):</strong>
+                                <span t-esc="maintenance_costs.get(o.id, 0.0)" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                <small class="text-muted">
+                                    (<span t-esc="maintenance_period_start"/> – <span t-esc="maintenance_period_end"/>)
+                                </small>
+                            </div>
+                            <div class="col-4">
+                                <strong>Total Payments Received:</strong>
+                                <span t-esc="payments_received.get(o.id, 0.0)" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            </div>
+                        </div>
+
+                        <!-- Pricing -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h4>Pricing Information</h4>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Monthly Rent:</strong></td>
+                                        <td class="text-end">
+                                            <span t-field="o.price" 
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Security Deposit:</strong></td>
+                                        <td class="text-end">
+                                            <span t-field="o.deposit_required" 
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Active Lease Info -->
+                        <t t-if="o.lease_ids">
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h4>Current Lease</h4>
+                                    <t t-set="active_lease" t-value="active_leases.get(o.id)"/>
+                                    <t t-if="active_lease">
+                                        <table class="table table-sm">
+                                            <tr>
+                                                <td><strong>Tenant:</strong></td>
+                                                <td><span t-field="active_lease.tenant_id"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Monthly Rent:</strong></td>
+                                                <td>
+                                                    <span t-field="active_lease.monthly_rent" 
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Start Date:</strong></td>
+                                                <td><span t-field="active_lease.start_date"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>End Date:</strong></td>
+                                                <td><span t-field="active_lease.end_date"/></td>
+                                            </tr>
+                                        </table>
+                                    </t>
+                                    <t t-else="">
+                                        <p class="text-muted">No active lease</p>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+
+
+
+                        <!-- Footer Note -->
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <p class="text-muted">
+                                    <small>
+                                        Generated on <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

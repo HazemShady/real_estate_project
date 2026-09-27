@@ -7,6 +7,10 @@ class Tenant(models.Model):
     _name = 'real_estate.tenant'
     _description = 'Real Estate Tenant'
     _order = 'name asc'
+    company_type = fields.Selection([
+        ('individual', 'Individual'),
+        ('company', 'Company'),
+    ], string='Tenant Type', default='individual', required=True)
 
     # ============================================================
     # Core Information
