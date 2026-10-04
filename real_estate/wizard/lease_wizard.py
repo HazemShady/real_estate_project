@@ -5,6 +5,7 @@ class LeaseWizard(models.TransientModel):
     _name = 'real_estate.lease.wizard'
     _description = 'Create Lease Wizard'
 
+    # Lease details collected before record creation.
     property_id = fields.Many2one(
         'real_estate.property',
         string='Property',
@@ -38,6 +39,7 @@ class LeaseWizard(models.TransientModel):
         if self.property_id:
             self.monthly_rent = self.property_id.price
 
+    # Create the lease from the validated wizard values.
     def action_create_lease(self):
         self.ensure_one()
         self.env['real_estate.lease'].create({

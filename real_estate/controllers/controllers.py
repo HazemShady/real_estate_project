@@ -6,16 +6,19 @@ from odoo.addons.portal.controllers.portal import CustomerPortal
 
 class RealEstatePortal(CustomerPortal):
 
+    # Portal navigation data and lease routes.
     def _prepare_portal_layout_values(self):
         values = super(RealEstatePortal, self)._prepare_portal_layout_values()
         tenant_model = request.env['real_estate.tenant']
         tenant_domain = [('email', '=', request.env.user.email)]
         if 'user_id' in tenant_model._fields:
+            # Accept the explicit link and retain email matching for older unlinked tenant records.
             tenant_domain = ['|', ('user_id', '=', request.env.user.id), ('email', '=', request.env.user.email)]
         tenant = tenant_model.sudo().search(tenant_domain, limit=1)
 
         lease_count = 0
         if tenant:
+            # sudo() is bounded to the tenant identified above before portal data is loaded.
             lease_count = request.env['real_estate.lease'].sudo().search_count([
                 ('tenant_id', '=', tenant.id)
             ])
@@ -35,6 +38,7 @@ class RealEstatePortal(CustomerPortal):
             })
             return request.render('real_estate.portal_my_leases', values)
 
+        # Restrict elevated access to this tenant's active leases only.
         leases = request.env['real_estate.lease'].sudo().search([
             ('tenant_id', '=', tenant.id),
             ('state', '=', 'active')

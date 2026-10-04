@@ -6,6 +6,8 @@ from odoo.exceptions import UserError
 class Tenant(models.Model):
     _name = 'real_estate.tenant'
     _description = 'Real Estate Tenant'
+    external_id = fields.Char(string='external_id')
+
     _order = 'name asc'
     company_type = fields.Selection([
         ('individual', 'Individual'),
@@ -18,6 +20,7 @@ class Tenant(models.Model):
     # ============================================================
     name = fields.Char(string='Tenant Name', required=True, index=True)
     email = fields.Char(string='Email', required=True, index=True)
+    created_by_api = fields.Boolean(string='Created by API', default=False, index=True)
     user_id = fields.Many2one(
         'res.users',
         string='Related User',
@@ -74,17 +77,17 @@ class Tenant(models.Model):
             record.write({'active': not record.active})
     
     def create_portal_user(self):
-        """Create a portal user for the tenant"""
+        """Create and link a portal account that uses the tenant email as its login."""
         for record in self:
             if not record.user_id:
-                # Create a new user with portal access
+                # Assign the new account to the portal group; do not copy the operator's groups.
                 new_user = self.env['res.users'].create({
                     'name': record.name,
                     'login': record.email,
                     'email': record.email,
                     'groups_id': [(6, 0, [self.env.ref('base.group_portal').id])],
                 })
-                #  # Link user to tenant
+                # Preserve the explicit tenant-to-user relationship for portal record lookup.
                 record.user_id = new_user.id     
             else:
                 raise UserError("This tenant already has a portal user.")        

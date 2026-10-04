@@ -17,10 +17,10 @@
                             <div class="col-6">
                                 <strong>Status:</strong>
                                 <t t-if="occupancy_rates.get(o.id, 0.0)">
-                                    <span class="badge rounded-pill text-bg-success">Available</span>
+                                    <span class="badge rounded-pill text-bg-warning">Occupied</span>
                                 </t>
                                 <t t-else="">
-                                    <span class="badge rounded-pill text-bg-danger">Occupied</span>
+                                    <span class="badge rounded-pill text-bg-success">Available</span>
                                 </t>
                             </div>
                         </div>

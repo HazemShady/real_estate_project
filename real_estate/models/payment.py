@@ -127,10 +127,5 @@ class LeasePayment(models.Model):
         self.write({'state': 'draft'})
     
     def _cron_auto_mark_paid(self):
-        """Scheduled action - mark payments with amount as paid"""
-        pending_payments = self.search([
-            ('amount', '>', 0),
-            ('state', 'in', ['draft', 'pending']),
-        ])
-        for payment in pending_payments:
-            payment.write({'state': 'paid'})
+        """Payments require confirmation and cannot be marked paid automatically."""
+        return False

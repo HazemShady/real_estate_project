@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from datetime import timedelta
 
 
@@ -62,7 +62,6 @@ class MaintenanceRequest(models.Model):
     lease_id = fields.Many2one(
         'real_estate.lease',
         string='Lease',
-        required=True,
         ondelete='cascade',
         index=True,
     )
@@ -96,9 +95,16 @@ class MaintenanceRequest(models.Model):
     # ============================================================
     # CRUD Overrides
     # ============================================================
+    @api.constrains('lease_id')
+    def _check_lease_id(self):
+        """Keep maintenance requests tied to a lease for tenant/property context."""
+        for record in self:
+            if not record.lease_id:
+                raise ValidationError('A maintenance request must be linked to a lease.')
+
     @api.model
     def create(self, vals):
-        """Generate reference from sequence on create."""
+        """Generate a reference and default emergency scheduling only when omitted."""
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('maintenance.request.sequence') or 'New'
 
@@ -108,14 +114,14 @@ class MaintenanceRequest(models.Model):
         return super(MaintenanceRequest, self).create(vals)
 
     def schedule_emergency_request(self):
-        """Set an emergency request to be scheduled for tomorrow."""
+        """Set emergency requests to tomorrow, replacing any current scheduled date."""
         for record in self:
             if record.urgency == 'emergency':
                 record.scheduled_date = fields.Date.today() + timedelta(days=1)
 
     @api.onchange('urgency')
     def _onchange_urgency(self):
-        """Auto-schedule emergency maintenance requests for tomorrow."""
+        """Apply the emergency date default when urgency changes in the form."""
         if self.urgency == 'emergency':
             self.schedule_emergency_request()
 
@@ -157,12 +163,17 @@ class MaintenanceRequest(models.Model):
                 )
                 continue
             template.send_mail(request.id, force_send=True)
+            request.reminder_sent_for_date = request.scheduled_date
 
     def _cron_auto_send_email_reminder_main(self):
         """Remind assigned users one day before active maintenance is scheduled."""
         tomorrow = fields.Date.today() + timedelta(days=1)
+        # Restrict to open requests and skip dates already covered by a reminder.
         requests = self.search([
             ('scheduled_date', '=', tomorrow),
+            ('state', 'in', ['submitted', 'in_progress']),
+            ('reminder_sent_for_date', '!=', tomorrow),
+            ('assigned_to.email', '!=', False),
         ])
         for main in requests:
             main.send_reminder_email()

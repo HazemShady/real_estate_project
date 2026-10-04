@@ -107,6 +107,7 @@
                 <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
                 <filter string="Has Mobile" name="has_mobile" domain="[('mobile', '!=', False)]"/>
                 <filter string="Has CRM Lead" name="has_crm" domain="[('crm_id', '!=', False)]"/>
+                <filter string="Created by API" name="created_by_api" domain="[('created_by_api', '=', True)]"/>
                 <separator/>
                 <group expand="0" string="Group By">
                     <filter string="City" name="group_by_city" context="{'group_by': 'city'}"/>

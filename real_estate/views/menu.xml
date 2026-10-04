@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Main Menu (Top Level) -->
+    <!-- Menu groups control visibility; model permissions are enforced separately by ACLs and rules. -->
     <menuitem
         id="menu_real_estate_root"
         name="Real Estate"
+        groups="real_estate.group_property_user,real_estate.group_property_manager,real_estate.group_maintenance,real_estate.group_maintenance_request"
         sequence="10"/>
 
     <!-- Properties Menu -->
@@ -12,7 +14,8 @@
         name="Properties"
         parent="menu_real_estate_root"
         action="action_property"
-        sequence="10"/>
+        sequence="10"
+        groups="real_estate.group_property_user,real_estate.group_property_manager"/>
         
 
     <!-- Leases Menu -->
@@ -22,21 +25,24 @@
         parent="menu_real_estate_root"
         action="action_lease"
         
-        sequence="20"/>
+        sequence="20"
+        groups="real_estate.group_property_user,real_estate.group_property_manager"/>
     <!-- Tenants Menu -->
     <menuitem
         id="menu_tenant"
         name="Tenants"
         parent="menu_real_estate_root"
         action="action_tenant"
-        sequence="30"/>
+        sequence="30"
+        groups="real_estate.group_property_user,real_estate.group_property_manager"/>
     <!-- Payments Menu -->
     <menuitem
         id="menu_lease_payment"
         name="Payments"
         parent="menu_real_estate_root"
         action="action_lease_payment"
-        sequence="50"/>
+        sequence="50"
+        groups="real_estate.group_property_manager"/>
     <menuitem
         id="menu_maintenance"
         name="Maintenance"
@@ -44,6 +50,10 @@
         action="action_maintenance"
         groups="real_estate.group_maintenance,real_estate.group_maintenance_request"
         sequence="40"/>
-
-        
+            <!-- Reports Menu -->
+    <menuitem id="menu_real_estate_reports"
+              name="Reporting"
+              parent="menu_real_estate_root"
+              sequence="50"/>
+ 
 </odoo>

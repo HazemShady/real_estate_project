@@ -5,6 +5,7 @@ class TenantWizard(models.TransientModel):
     _name = 'real_estate.tenant.wizard'
     _description = 'Create Tenant from CRM'
 
+    # Tenant details copied from a CRM opportunity.
     crm_id = fields.Many2one(
         'crm.lead',
         string='CRM Opportunity',
@@ -24,6 +25,7 @@ class TenantWizard(models.TransientModel):
     ], string='Age Category')
     notes = fields.Text(string='Notes')
 
+    # Create the tenant and retain the CRM relationship.
     def action_create_tenant(self):
         """Create a tenant and keep a link to the CRM opportunity."""
         self.ensure_one()

@@ -28,6 +28,10 @@
         <field name="arch" type="xml">
             <form string="Lease Payment">
                 <header>
+                    <button name="action_set_pending" string="Mark Pending" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_set_paid" string="Mark Paid" type="object" class="oe_highlight" invisible="state not in ['draft', 'pending']"/>
+                    <button name="action_set_reconciled" string="Reconcile" type="object" invisible="state != 'paid'"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,pending,paid,reconciled"/>
                 </header>
 
@@ -85,6 +89,6 @@
         <field name="interval_type">days</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
-        <field name="active" eval="True"/>
+        <field name="active" eval="False"/>
     </record>
 </odoo>

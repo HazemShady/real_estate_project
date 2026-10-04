@@ -24,7 +24,6 @@ class Lease(models.Model):
         string='Status',
         default='draft',
         required=True,
-        tracking=True,
     )
 
     # ============================================================
@@ -57,6 +56,11 @@ class Lease(models.Model):
     # Financial Details
     # ============================================================
     monthly_rent = fields.Float(string='Monthly Rent', required=True)
+    currency_id = fields.Many2one(
+        related='property_id.currency_id',
+        string='Currency',
+        readonly=True,
+    )
     deposit_paid = fields.Float(string='Deposit Paid')
 
     # ============================================================
@@ -81,7 +85,7 @@ class Lease(models.Model):
     # ============================================================
     maintenance_ids = fields.One2many('maintenance.request', 'lease_id', string='Maintenance Requests')
     payment_ids = fields.One2many('lease.payment', 'lease_id', string='Payments')
-    tenant_age = fields.Integer(string='Tenant Age', compute='_compute_tenant_age', store=True)
+    tenant_age = fields.Integer(string='Tenant Age', compute='_compute_tenant_age')
     notes = fields.Text(string='Notes')
 
     # ============================================================
@@ -118,7 +122,7 @@ class Lease(models.Model):
     # ============================================================
     @api.depends('start_date', 'end_date')
     def _compute_duration(self):
-        """Calculate lease duration in months."""
+        """Estimate duration using fixed 30-day months, not calendar months."""
         for record in self:
             if record.start_date and record.end_date:
                 delta = record.end_date - record.start_date
@@ -128,7 +132,7 @@ class Lease(models.Model):
 
     @api.depends('start_date', 'end_date', 'state')
     def _compute_is_active(self):
-        """Check if lease is currently active based on dates and state."""
+        """Require the active state and an inclusive date range containing today."""
         today = fields.Date.today()
         for record in self:
             if record.state == 'active' and record.start_date and record.end_date:
@@ -221,10 +225,11 @@ class Lease(models.Model):
             },
         }
     def _cron_auto_expire_leases(self):
-        """Scheduled action - expire leases whose end date has passed"""
+        """Expire active or at-risk leases whose end date has passed."""
         today = fields.Date.today()
         expired_leases = self.search([
             ('end_date', '<', today),
+            ('state', 'in', ['active', 'at_risk']),
         ])
         for lease in expired_leases:
             lease.write({'state': 'expired'})    
@@ -240,10 +245,11 @@ class Lease(models.Model):
 
     @api.constrains('deposit_paid', 'property_id')
     def _check_deposit_amount(self):
-        """Ensure the lease deposit does not exceed the required property deposit."""
+        """Cap paid deposits when the property has a positive configured deposit."""
         for record in self:
             required_deposit = record.property_id.deposit or 0.0 if record.property_id else 0.0
             deposit_paid = record.deposit_paid or 0.0
+            # A zero property deposit currently disables this upper-bound check.
             if required_deposit and deposit_paid > required_deposit:
                 raise ValidationError(
                     "The deposit paid cannot exceed the required deposit amount for this property."
@@ -253,7 +259,7 @@ class Lease(models.Model):
     last_reminder_sent = fields.Date(string='Last Reminder Sent', readonly=True)
 
     def send_reminder_email(self):
-        """Send the upcoming-payment reminder for this lease."""
+        """Send a payment reminder when the tenant has an email address."""
         template_xml_id = 'real_estate.email_template_payment_upcoming'
         template = self.env.ref(template_xml_id, raise_if_not_found=False)
         if not template:
@@ -267,7 +273,7 @@ class Lease(models.Model):
 
     @api.model
     def _cron_send_payment_reminders(self):
-        """Email active leases one day before their next payment date."""
+        """Email active leases one day before payment; today's date avoids cron repeats."""
         today = fields.Date.today()
         tomorrow = today + timedelta(days=1)
         leases = self.search([

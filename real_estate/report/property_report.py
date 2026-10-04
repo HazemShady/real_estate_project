@@ -6,12 +6,14 @@ class PropertyReportSummary(models.AbstractModel):
     _name = 'report.real_estate.report_property_summary'
     _description = 'Property Summary Report'
 
+    # Prepare occupancy, payment, and maintenance data for the report.
     @api.model
     def _get_report_values(self, docids, data=None):
         properties = self.env['real_estate.property'].browse(docids).exists()
         today = fields.Date.today()
         six_months_ago = today - relativedelta(months=6)
 
+        # Occupancy requires an active lease covering today; costs are recent, payments are lifetime.
         occupancy_rates = {}
         active_leases = {}
         empty_lease = self.env['real_estate.lease']

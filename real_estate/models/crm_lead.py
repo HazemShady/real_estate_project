@@ -9,6 +9,8 @@ class CrmLead(models.Model):
     # Real Estate Fields
     # Extension of CRM lead for real estate property types
     # ============================================================
+    email = fields.Char(string='Email', index=True)
+
     property_type = fields.Selection(
         [
             ('apartment', 'Apartment'),
@@ -17,7 +19,6 @@ class CrmLead(models.Model):
             ('commercial', 'Commercial'),
         ],
         string='Property Type',
-        required=True,
     )
 
     # ============================================================

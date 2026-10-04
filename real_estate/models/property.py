@@ -14,6 +14,7 @@ class Property(models.Model):
     # Fields related to the basic property information
     # ============================================================
     name = fields.Char(string='Property Name', required=True, index=True)
+    external_id = fields.Char(string='external_id')
     description = fields.Text(string='Description')
     property_image = fields.Binary(string='Property Image')
     property_type = fields.Selection(
@@ -35,7 +36,7 @@ class Property(models.Model):
     # Fields related to pricing and deposits
     # ============================================================
     price = fields.Float(string='Monthly Rent', required=True)
-    deposit = fields.Float(string='Deposit Amount', required=True)
+    deposit = fields.Float(string='Deposit Amount', required=False)
     deposit_required = fields.Float(
         string='Required Deposit',
         related='deposit',
@@ -65,9 +66,9 @@ class Property(models.Model):
     # Constraints & Overrides
     # ============================================================
     def write(self, vals):
-        """Prevent editing bedrooms when property is unavailable."""
+        """Block bedroom changes when the resulting property is unavailable."""
         if 'bedrooms' in vals:
-            # Check if any record in self is unavailable
+            # Evaluate availability after this write, including an availability change in vals.
             for record in self:
                 new_available = vals.get('available', record.available)
                 if new_available is False and vals.get('bedrooms') != record.bedrooms:
@@ -94,3 +95,9 @@ class Property(models.Model):
         for record in self:
             record.write({'available': not record.available})
             
+    def action_export_excel(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/real_estate/property/excel_export/{self.id}',
+            'target': 'self',
+        }        

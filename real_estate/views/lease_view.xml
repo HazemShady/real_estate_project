@@ -92,6 +92,7 @@
                     <group string="Financial Details">
                         <group string="Rent &amp; Deposit">
                             <field name="monthly_rent"/>
+                            <field name="currency_id" invisible="1"/>
                             <field name="deposit_paid"/>
                             <field name="next_payment_date"/>
                             <field name="last_reminder_sent" readonly="1"/>
@@ -102,7 +103,7 @@
                             <field name="air_condition_cost"/>
                             <field name="appliance_cost"/>
                             <field name="other_cost"/>
-                            <field name="total_cost" readonly="1" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                            <field name="total_cost" readonly="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
                     </group>
 
@@ -129,7 +130,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Payments">
+                        <page string="Payments" groups="real_estate.group_property_manager">
                             <field name="payment_ids">
                                 <tree create="false" delete="false">
                                     <field name="name"/>
@@ -161,6 +162,7 @@
                 <field name="property_id"/>
                 <field name="tenant_id"/>
                 <field name="monthly_rent"/>
+                <field name="currency_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
 
@@ -180,7 +182,7 @@
                                     <field name="property_id"/> | <field name="tenant_id"/>
                                 </div>
                                 <div class="text-muted mt-1">
-                                    Rent: <field name="monthly_rent" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                    Rent: <field name="monthly_rent" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 </div>
                                 <div class="text-muted mt-1">
                                     <field name="start_date"/> - <field name="end_date"/>

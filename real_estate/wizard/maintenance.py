@@ -3,7 +3,8 @@ from odoo import models, fields, api
 class MaintenanceRequestWizard(models.TransientModel):
     _name = 'maintenance.request.wizard'
     _description = 'Maintenance Request Wizard'
-    
+
+    # Request details collected from a lease form.
     lease_id = fields.Many2one('real_estate.lease', required=True)
     property_id = fields.Many2one('real_estate.property', related='lease_id.property_id', readonly=True)
     
@@ -31,7 +32,8 @@ class MaintenanceRequestWizard(models.TransientModel):
         default=lambda self: self.env.context.get('default_electricity_bill_date'),
     )
     tenant_phone = fields.Char()
-    
+
+    # Create the request and return it to the user.
     def action_submit_request(self):
         """Create maintenance request and notify manager"""
         self.ensure_one()

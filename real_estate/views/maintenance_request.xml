@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <tree string="maintenances">
                 <field name="name"/>
-                <field name="lease_id"/>
+                <field name="lease_id" required="1"/>
                 <field name="property_id"/>
                 <field name="assigned_to"/>
                 <field name="issue_type"/>
@@ -24,6 +24,13 @@
         <field name="model">maintenance.request</field>
         <field name="arch" type="xml">
             <form string="maintenance">
+                <header>
+                    <button name="action_set_in_progress" string="Start Work" type="object" class="oe_highlight" invisible="state != 'submitted'"/>
+                    <button name="action_set_done" string="Mark Done" type="object" class="oe_highlight" invisible="state != 'in_progress'"/>
+                    <button name="action_set_cancelled" string="Cancel" type="object" invisible="state in ['done', 'cancelled']"/>
+                    <button name="action_reset_to_submitted" string="Reopen" type="object" invisible="state not in ['done', 'cancelled']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="submitted,in_progress,done,cancelled"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -35,6 +42,7 @@
                             <field name="lease_id"/>
                             <field name="assigned_to"/>
                             <field name="actual_cost"/>
+                            <field name="completion_date" readonly="1"/>
                         </group>
                     </group>
                     <group string="Maintenance Information">

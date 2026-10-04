@@ -5,6 +5,15 @@ access_tenant_manager,Tenant Manager,model_real_estate_tenant,real_estate.group_
 access_maintenance_user,Maintenance User,model_maintenance_request,real_estate.group_maintenance,1,1,1,1
 access_maintenance_admin,Maintenance Administrator,model_maintenance_request,real_estate.group_maintenance_request,1,1,1,1
 access_lease_wizard_manager,Lease Wizard Manager,model_real_estate_lease_wizard,real_estate.group_lease_manager,1,1,1,1
+access_rent_roll_wizard_manager,Rent Roll Wizard Manager,model_rent_roll_wizard,real_estate.group_lease_manager,1,1,1,1
+access_rent_roll_wizard_property_manager,Rent Roll Wizard Property Manager,model_rent_roll_wizard,real_estate.group_property_manager,1,1,1,1
 access_tenant_wizard_manager,Tenant Wizard Manager,model_real_estate_tenant_wizard,real_estate.group_property_manager,1,1,1,1
 access_maintenance_wizard_user,Maintenance Wizard User,model_maintenance_request_wizard,real_estate.group_maintenance,1,1,1,1
 access_lease_payment_manager,Lease Payment Manager,model_lease_payment,real_estate.group_property_manager,1,1,1,1
+access_property_user,Real Estate User Property,model_real_estate_property,real_estate.group_property_user,1,1,1,1
+access_lease_user,Real Estate User Lease,model_real_estate_lease,real_estate.group_property_user,1,1,1,1
+access_tenant_user,Real Estate User Tenant,model_real_estate_tenant,real_estate.group_property_user,1,1,1,1
+access_lease_wizard_user,Real Estate User Lease Wizard,model_real_estate_lease_wizard,real_estate.group_property_user,1,1,1,1
+access_rent_roll_wizard_user,Real Estate User Rent Roll Wizard,model_rent_roll_wizard,real_estate.group_property_user,1,1,1,1
+access_tenant_wizard_user,Real Estate User Tenant Wizard,model_real_estate_tenant_wizard,real_estate.group_property_user,1,1,1,1
+access_maintenance_report_wizard,Maintenance Report Wizard,model_maintenance_report_wizard,real_estate.group_maintenance,1,1,1,1

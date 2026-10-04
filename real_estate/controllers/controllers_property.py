@@ -5,8 +5,10 @@ from odoo.addons.portal.controllers.portal import CustomerPortal
 
 class RealEstatePropertyPortal(CustomerPortal):
 
+    # Agent property portal data and routes.
     def _prepare_portal_layout_values(self):
         values = super(RealEstatePropertyPortal, self)._prepare_portal_layout_values()
+        # The agent domain is the record boundary for this elevated count.
         property_count = request.env['real_estate.property'].sudo().search_count([
             ('agent_id', '=', request.env.user.id)
         ])
@@ -19,6 +21,7 @@ class RealEstatePropertyPortal(CustomerPortal):
     @http.route(['/my/properties', '/my/properties/page/<int:page>'], type='http', auth='user', website=True)
     def portal_my_properties(self, page=1, **kw):
         values = self._prepare_portal_layout_values()
+        # Keep the sudo() result scoped to properties assigned to the current agent.
         properties = request.env['real_estate.property'].sudo().search([
             ('agent_id', '=', request.env.user.id)
         ], order='name asc')

@@ -6,12 +6,14 @@ class LeaseReportSummary(models.AbstractModel):
     _name = 'report.real_estate.report_lease_summary'
     _description = 'Lease Summary Report'
 
+    # Prepare lease totals and related maintenance data for the report.
     @api.model
     def _get_report_values(self, docids, data=None):
         leases = self.env['real_estate.lease'].browse(docids).exists()
         today = fields.Date.today()
         maintenance_period_start = today - relativedelta(months=6)
 
+        # Payment totals are lifetime paid/reconciled amounts; maintenance uses a six-month window.
         payments_received = {lease.id: 0.0 for lease in leases}
         payments = self.env['lease.payment'].search([
             ('lease_id', 'in', leases.ids),
